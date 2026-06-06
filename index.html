@@ -31,6 +31,9 @@
     };
   </script>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/framer-motion@10.18.0/dist/framer-motion.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
     html { scroll-behavior: smooth; }
@@ -93,11 +96,10 @@
 </head>
 <body>
   <div id="root"></div>
-  <script type="text/babel" data-presets="react" data-type="module">
+  <script type="text/babel" data-presets="react">
     /** @jsxRuntime classic */
-    import React, { useEffect, useState } from 'https://esm.sh/react@18.3.1';
-    import ReactDOM from 'https://esm.sh/react-dom@18.3.1/client';
-    import { motion, AnimatePresence } from 'https://esm.sh/framer-motion@11.2.5';
+    const { useEffect, useState } = React;
+    const { motion, AnimatePresence } = Motion;
 
     const navLinks = [
       { id: 'about', label: 'About' },
