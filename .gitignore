@@ -1,0 +1,14 @@
+# Dev files
+node_modules/
+.DS_Store
+Thumbs.db
+*.log
+
+# Claude / IDE
+.claude/
+CLAUDE.md
+WEBSITE\ BUILDER.code-workspace
+Untitled-1
+
+# Temp screenshots
+temporary\ screenshots/

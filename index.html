@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SAVISH — Luxury Creative Agency</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script>
+    window.tailwind = window.tailwind || {};
+    window.tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: '#0b0907',
+            cream: '#f2ede6',
+            sand: '#c4ad96',
+            stone: '#7a7068',
+            taupe: '#a3917f',
+          },
+          fontFamily: {
+            serif: ['Cormorant Garamond', 'Georgia', 'serif'],
+            sans: ['DM Sans', 'system-ui', 'sans-serif'],
+          },
+          boxShadow: {
+            soft: '0 40px 120px rgba(0,0,0,0.2)',
+          },
+        },
+      },
+    };
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #0b0907;
+      color: #f2ede6;
+      font-family: 'DM Sans', system-ui, sans-serif;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image: radial-gradient(circle at 20% 20%, rgba(196,173,150,0.12) 0%, transparent 20%), radial-gradient(circle at 80% 10%, rgba(242,237,230,0.08) 0%, transparent 18%), radial-gradient(circle at 50% 80%, rgba(255,255,255,0.04) 0%, transparent 22%);
+      opacity: 0.55;
+      mix-blend-mode: lighten;
+    }
+    .section-divider {
+      height: 1px;
+      background: rgba(242,237,230,0.08);
+      margin: 0 auto;
+    }
+    .link-underline {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+    }
+    .link-underline::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -2px;
+      height: 1px;
+      background: rgba(242,237,230,0.3);
+      transform-origin: left;
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+    .link-underline:hover::after { transform: scaleX(1); }
+    .glass-panel {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 30px 90px rgba(0,0,0,0.18);
+    }
+    .scroll-boundary {
+      position: sticky;
+      top: 0;
+    }
+    @media (max-width: 768px) {
+      .mobile-hidden { display: none !important; }
+      .desktop-hidden { display: block !important; }
+      .hero-grid { grid-template-columns: 1fr !important; }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel" data-presets="react" data-type="module">
+    /** @jsxRuntime classic */
+    import React, { useEffect, useState } from 'https://esm.sh/react@18.3.1';
+    import ReactDOM from 'https://esm.sh/react-dom@18.3.1/client';
+    import { motion, AnimatePresence } from 'https://esm.sh/framer-motion@11.2.5';
+
+    const navLinks = [
+      { id: 'about', label: 'About' },
+      { id: 'work', label: 'Selected Work' },
+      { id: 'case-studies', label: 'Case Studies' },
+      { id: 'results', label: 'Results' },
+      { id: 'resume', label: 'Resume' },
+      { id: 'contact', label: 'Contact' },
+    ];
+
+    const workProjects = [
+      { id: 'angelina', name: "Angelina's Kitchen", image: 'https://placehold.co/1200x900?text=Angelina%27s+Kitchen' },
+      { id: 'flash', name: "Flash Security Integrators", image: 'https://placehold.co/1200x900?text=Flash+Security' },
+      { id: 'felina', name: 'Felina Restaurants', image: 'https://placehold.co/1200x900?text=Felina+Restaurants' },
+      { id: 'jewelry', name: 'Jewelry Design Gallery', image: 'https://placehold.co/1200x900?text=Jewelry+Design+Gallery' },
+      { id: 'esperto', name: 'Esperto Hospitality Group', image: 'https://placehold.co/1200x900?text=Esperto+Hospitality+Group' },
+    ];
+
+    const resumeTimeline = [
+      { role: 'Media Manager', company: 'Industry Media', date: '2022–Present' },
+      { role: 'Founder', company: 'Savish', date: '2023–2024' },
+      { role: 'B.S. Business Administration', company: 'Monmouth University', date: '2018–2022' },
+    ];
+
+    const workHighlights = [
+      'Marketing Leadership',
+      'Brand Growth',
+      'Creative Direction',
+      'Account Management',
+      'Campaign Strategy',
+      'Audience Development',
+      'Performance Reporting',
+      'Cross-functional Collaboration',
+    ];
+
+    const caseStudies = [
+      {
+        id: 'angelina',
+        client: "Angelina's Kitchen & Ristorantee",
+        goal: 'Develop a cohesive marketing strategy that strengthened brand recognition while clearly defining the identity of each location.',
+        strategy: [
+          'Brand Architecture — developed content strategy for multi-location presence',
+          'Storytelling — shifted from promotional to story-driven marketing highlighting family ownership, culinary experiences, and team culture',
+          'Audience Engagement — implemented proactive community management across social media, DM, email, and SMS',
+          'Community Involvement — showcased weddings, private events, and seasonal offerings',
+          'Consistent brand messaging — unified visual and messaging framework across three locations'
+        ],
+        kpis: [
+          { label: 'Audience Growth', value: '+988%', badge: '2,936 → 31,000 followers' },
+          { label: 'Impressions', value: '2.4M', badge: '+1,100% increase' },
+          { label: 'Engagements', value: '42,506', badge: '+212% growth' },
+          { label: 'Video Views', value: '424K+', badge: 'Primary growth driver' },
+        ],
+        summary: 'Transformed Angelina\'s Kitchen from fragmented marketing efforts across three locations into a unified, scalable digital brand. By developing clear brand differentiation, implementing story-driven content, and establishing proactive customer engagement systems, the brand achieved 988% audience growth and positioned itself as a premium hospitality destination. The strategy balanced consistency across all locations while preserving the individuality of each concept.',
+        image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=1200&q=80&fm=jpg',
+      },
+      {
+        id: 'flash',
+        client: "Flash Security Integrators",
+        goal: 'Build brand awareness and emotional connection through humanized storytelling, influencer partnerships, and localized multi-market campaigns.',
+        strategy: [
+          'Humanizing the brand through team spotlights and culture-focused content',
+          'Influencer collaboration with Danielle Cabral (RHONJ)',
+          'Geo-targeted advertising across multiple service markets',
+          'A/B testing and continuous creative optimization',
+          'Behind-the-scenes and employee feature storytelling',
+          'Community involvement and thought leadership',
+          'Multi-location marketing with localized messaging'
+        ],
+        kpis: [
+          { label: 'Audience Growth', value: '+25%', badge: '+403% Net Growth' },
+          { label: 'Impressions', value: '416K', badge: '+737% Increase' },
+          { label: 'Engagements', value: '5,706', badge: '+20,278% Increase' },
+          { label: 'Video Views', value: '264K', badge: '+2,334% Engagement Rate' },
+        ],
+        summary: 'Transformed Flash Security from a service-focused brand into a recognizable industry leader through strategic humanization, influencer partnerships, and data-driven geo-targeted campaigns. By showcasing the people behind the company and creating memorable content, Flash achieved 416K impressions, 20,000%+ engagement increase, and strengthened brand awareness across multiple markets. The strategy built trust and familiarity long before customers needed security services.',
+        image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=80&fm=jpg',
+        media: {
+          photos: [
+            '/flash/photos/R5II0388.jpg',
+            '/flash/photos/R5II6023.jpg',
+            '/flash/photos/R5II6144.jpg',
+            '/flash/photos/R6_C3721.jpg',
+          ],
+          reels: [
+            { src: '/flash/reels/FLASH - SPINNING CHAIR 5.mp4', label: 'Spinning Chair' },
+            { src: '/flash/reels/FLASH- CORE VALUES EP.2 W CAPTIONS copy.mp4', label: 'Core Values Ep.2' },
+            { src: '/flash/reels/INTRO.mp4', label: 'Brand Intro' },
+            { src: '/flash/reels/final mike flash.mp4', label: 'Team Feature' },
+          ],
+        },
+      },
+      {
+        id: 'felina',
+        client: 'Felina Restaurants',
+        goal: 'Transform traditional restaurant concepts into trend-driven, socially engaging brands with an influencer-inspired content style.',
+        strategy: ['Trend-focused content', 'Influencer-style creative direction', 'Social-first storytelling', 'Multi-location content', 'Brand positioning'],
+        kpis: [
+          { label: 'Impressions', value: '1.18M', badge: '' },
+          { label: 'Engagements', value: '4,460', badge: '' },
+          { label: 'Audience Growth', value: '+1,292', badge: '' },
+          { label: 'Video Views', value: '115,666', badge: '' },
+        ],
+        summary: 'Modernized restaurant content strategy by creating trend-focused, social-first content that increased visibility and strengthened brand presence.',
+        image: 'https://placehold.co/1600x1000?text=Felina+Restaurants',
+      },
+    ];
+
+    const resultCards = [
+      { label: 'Total Impressions', value: '4M+' },
+      { label: 'Engagements', value: '49K+' },
+      { label: 'Audience Growth', value: '16K+' },
+      { label: 'Video Views', value: '485K+' },
+    ];
+
+    function useCountUp(target, duration = 1200) {
+      const [value, setValue] = useState(0);
+      useEffect(() => {
+        let start = null;
+        const sanitized = Number(target.toString().replace(/[^0-9]/g, '')) || 0;
+        const step = (timestamp) => {
+          if (!start) start = timestamp;
+          const progress = Math.min((timestamp - start) / duration, 1);
+          setValue(Math.floor(progress * sanitized));
+          if (progress < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      }, [target, duration]);
+      return value;
+    }
+
+    function SectionHeading({ label, title }) {
+      return (
+        <div className="max-w-3xl">
+          <p className="text-[10px] md:text-[11px] uppercase tracking-[0.32em] text-sand mb-6">{label}</p>
+          <h2 className="font-serif font-[300] text-[clamp(2.5rem,5vw,4.7rem)] leading-[0.95] tracking-[-0.04em] text-cream">{title}</h2>
+        </div>
+      );
+    }
+
+    function CaseStudyModal({ study, onClose }) {
+      if (!study) return null;
+      return (
+        <div
+          onClick={onClose}
+          className="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 md:p-8 overflow-y-auto"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-4xl bg-ink rounded-[32px] border border-white/10 overflow-hidden"
+          >
+            {/* Close Button */}
+            <button
+              onClick={onClose}
+              className="absolute top-6 right-6 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition"
+            >
+              <svg className="w-6 h-6 text-cream" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            {/* Content */}
+            <div className="p-8 md:p-12 space-y-8">
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.32em] text-sand mb-4">Case Study</p>
+                <h2 className="font-serif text-[clamp(2rem,5vw,3.5rem)] leading-[0.95] text-cream mb-2">{study.client}</h2>
+                <p className="text-cream/60 text-lg">{study.goal}</p>
+              </div>
+
+              <div className="rounded-[24px] border border-white/10 bg-white/5 p-7">
+                <p className="text-[10px] uppercase tracking-[0.32em] text-sand mb-3">My Role</p>
+                <h3 className="font-serif text-2xl text-cream mb-4">Strategic Partnership</h3>
+                <p className="text-cream/70 leading-relaxed mb-6">Worked directly with ownership and executive leadership to develop marketing initiatives, review performance data, identify growth opportunities, and execute campaigns aligned with business objectives.</p>
+                <p className="text-[10px] uppercase tracking-[0.28em] text-sand mb-4">Responsibilities Included</p>
+                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {[
+                    'Monthly reporting meetings',
+                    'KPI analysis',
+                    'Campaign ideation',
+                    'Content strategy',
+                    'Marketing consultation',
+                    'Creative direction',
+                    'Vendor and team coordination',
+                  ].map((item) => (
+                    <li key={item} className="flex items-center gap-3 text-sm text-cream/70">
+                      <span className="text-sand text-xs">◎</span>{item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="font-serif text-2xl text-sand mb-4">Strategy</h3>
+                <ul className="space-y-2 text-cream/70">
+                  {study.strategy.map((item, i) => <li key={i} className="flex gap-3"><span className="text-sand">✓</span> {item}</li>)}
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="font-serif text-2xl text-sand mb-4">Key Performance Indicators</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {study.kpis.map((kpi, i) => (
+                    <div key={i} className="bg-white/5 border border-white/10 rounded-[20px] p-5 text-center">
+                      <p className="text-[11px] uppercase tracking-[0.2em] text-sand mb-2">{kpi.label}</p>
+                      <p className="font-serif text-3xl text-cream">{kpi.value}</p>
+                      {kpi.badge && <p className="text-xs text-cream/50 mt-2">{kpi.badge}</p>}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h3 className="font-serif text-2xl text-sand mb-4">Impact</h3>
+                <p className="text-cream/70 leading-relaxed max-w-3xl">{study.summary}</p>
+              </div>
+
+              {study.media ? (
+                <div className="space-y-8 pt-2">
+                  {study.media.photos && study.media.photos.length > 0 && (
+                    <div>
+                      <p className="text-[10px] uppercase tracking-[0.32em] text-sand mb-4">Photography</p>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        {study.media.photos.map((src, i) => (
+                          <div key={i} className="relative overflow-hidden rounded-[16px] border border-white/10 bg-white/5 aspect-square">
+                            <img src={src} alt={`${study.client} photo ${i + 1}`} className="h-full w-full object-cover transition duration-500 hover:scale-105" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {study.media.reels && study.media.reels.length > 0 && (
+                    <div>
+                      <p className="text-[10px] uppercase tracking-[0.32em] text-sand mb-4">Reels & Video Content</p>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {study.media.reels.map((reel, i) => (
+                          <div key={i} className="overflow-hidden rounded-[20px] border border-white/10 bg-white/5">
+                            <video
+                              src={reel.src}
+                              controls
+                              playsInline
+                              preload="metadata"
+                              className="w-full aspect-video object-cover"
+                            />
+                            <p className="px-4 py-3 text-xs text-cream/60 uppercase tracking-[0.2em]">{reel.label}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
+                  <div className="aspect-video bg-white/5 border border-white/10 rounded-[20px] flex items-center justify-center">
+                    <p className="text-sm text-white/40">Content Example 1</p>
+                  </div>
+                  <div className="aspect-video bg-white/5 border border-white/10 rounded-[20px] flex items-center justify-center">
+                    <p className="text-sm text-white/40">Content Example 2</p>
+                  </div>
+                  <div className="aspect-video bg-white/5 border border-white/10 rounded-[20px] flex items-center justify-center">
+                    <p className="text-sm text-white/40">Analytics</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function SectionHeading({ label, title }) {
+      return (
+        <div className="max-w-3xl">
+          <p className="text-[10px] md:text-[11px] uppercase tracking-[0.32em] text-sand mb-6">{label}</p>
+          <h2 className="font-serif font-[300] text-[clamp(2.5rem,5vw,4.7rem)] leading-[0.95] tracking-[-0.04em] text-cream">{title}</h2>
+        </div>
+      );
+    }
+
+    function CountCard({ label, value, detail }) {
+      const count = useCountUp(value);
+      const raw = value.toString();
+      const suffix = raw.replace(/[\d,]/g, '');
+      const isPureNumber = /^[0-9]+$/.test(raw);
+      const isPlusNumber = /^[0-9]+\+$/.test(raw);
+      const formatted = isPureNumber || isPlusNumber ? `${count.toLocaleString()}${suffix}` : raw;
+      return (
+        <motion.article
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.25 }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+          className="glass-panel rounded-[24px] p-8 min-h-[170px] flex flex-col justify-between"
+        >
+          <p className="text-[11px] uppercase tracking-[0.3em] text-sand">{label}</p>
+          <div className="mt-4">
+            <p className="font-serif text-[2.4rem] md:text-[3rem] leading-[0.95] text-cream">{formatted}</p>
+            {detail ? <p className="mt-4 text-sm text-stone leading-7">{detail}</p> : null}
+          </div>
+        </motion.article>
+      );
+    }
+
+    function ServiceCard({ title, index }) {
+      return (
+        <motion.article
+          whileHover={{ y: -8, scale: 1.01 }}
+          transition={{ duration: 0.35, ease: 'easeOut' }}
+          className="group rounded-[24px] border border-white/10 bg-cream/5 p-8 min-h-[220px]"
+        >
+          <p className="text-[11px] uppercase tracking-[0.3em] text-stone mb-4">0{index + 1}</p>
+          <h3 className="font-serif text-[1.5rem] md:text-[1.8rem] leading-[1.05] text-ink">{title}</h3>
+        </motion.article>
+      );
+    }
+
+    function LineChart() {
+      return (
+        <svg viewBox="0 0 620 160" aria-hidden="true" className="w-full h-[160px]">
+          <defs>
+            <linearGradient id="chartGradient" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stopColor="rgba(196,173,150,0.15)" />
+              <stop offset="100%" stopColor="rgba(196,173,150,0.45)" />
+            </linearGradient>
+          </defs>
+          <path d="M20 130 C120 100 180 90 240 112 C300 135 340 88 400 78 C460 70 520 84 600 40" fill="none" stroke="#f2ede6" strokeWidth="3" strokeLinecap="round" />
+          <path d="M20 132 C120 102 180 92 240 114 C300 137 340 90 400 80 C460 72 520 86 600 42" fill="none" stroke="url(#chartGradient)" strokeWidth="12" opacity="0.12" />
+          {[20, 120, 240, 400, 520, 600].map((x, index) => (
+            <circle key={index} cx={x} cy={index < 2 ? 102 : index < 4 ? 80 : 48} r="4" fill="#f2ede6" />
+          ))}
+        </svg>
+      );
+    }
+
+    function CaseStudyCard({ study, isOpen, onToggle, onOpenModal }) {
+      return (
+        <motion.article
+          layout
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.25 }}
+          transition={{ duration: 0.45, ease: 'easeOut' }}
+          className="glass-panel rounded-[32px] border border-white/10 overflow-hidden"
+        >
+          <button type="button" onClick={() => onToggle(study.id)} className="w-full text-left">
+            <div className="grid gap-6 lg:grid-cols-[1fr_auto] p-8">
+              <div>
+                <p className="text-[11px] uppercase tracking-[0.3em] text-sand mb-4">Client</p>
+                <h3 className="font-serif text-[2rem] md:text-[2.4rem] leading-[1.02] text-cream">{study.client}</h3>
+                <p className="mt-6 text-sm leading-7 text-stone max-w-xl">{study.goal}</p>
+              </div>
+              <div className="flex items-start justify-end">
+                <span className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[11px] uppercase tracking-[0.3em] text-cream">{isOpen ? 'Close' : 'Explore'}</span>
+              </div>
+            </div>
+          </button>
+          <AnimatePresence initial={false}>
+            {isOpen ? (
+              <motion.div
+                key="open"
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.35, ease: 'easeOut' }}
+                className="border-t border-white/10 px-8 pb-8"
+              >
+                <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
+                  <div className="space-y-6">
+                    <div>
+                      <p className="text-[11px] uppercase tracking-[0.3em] text-sand mb-3">Strategy</p>
+                      <ul className="grid gap-3 text-sm leading-7 text-stone list-disc list-inside">
+                        {study.strategy.map((item) => <li key={item}>{item}</li>)}
+                      </ul>
+                    </div>
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      {study.kpis.map((metric) => (
+                        <div key={metric.label} className="rounded-[24px] border border-white/10 bg-ink/80 p-5">
+                          <p className="text-[11px] uppercase tracking-[0.3em] text-sand">{metric.label}</p>
+                          <p className="mt-4 font-serif text-[1.8rem] leading-[1.05] text-cream">{metric.value}</p>
+                          {metric.badge ? <p className="mt-3 text-sm text-stone">{metric.badge}</p> : null}
+                        </div>
+                      ))}
+                    </div>
+                    <p className="text-sm leading-8 text-stone">{study.summary}</p>
+                    <button
+                      onClick={() => onOpenModal(study)}
+                      className="inline-flex rounded-full bg-sand px-8 py-3 text-[11px] uppercase tracking-[0.32em] text-ink font-600 transition hover:bg-cream"
+                    >
+                      View Full Case Study →
+                    </button>
+                  </div>
+                  <div className="space-y-6">
+                    <div className="rounded-[24px] bg-white/5 p-6 hidden">
+                      <p className="text-[11px] uppercase tracking-[0.3em] text-sand mb-4">Performance</p>
+                      <LineChart />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <img src={study.image} alt={study.client} className="h-[160px] w-full rounded-[20px] object-cover" />
+                      <img src="https://placehold.co/640x480?text=Top+Content" alt="Top content" className="h-[160px] w-full rounded-[20px] object-cover" />
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ) : null}
+          </AnimatePresence>
+        </motion.article>
+      );
+    }
+
+    function TimelineItem({ item }) {
+      return (
+        <div className="grid gap-3 rounded-[28px] border border-white/10 bg-white/5 p-6">
+          <p className="text-[11px] uppercase tracking-[0.32em] text-sand">{item.date}</p>
+          <p className="font-serif text-[1.5rem] text-cream">{item.role}</p>
+          <p className="text-sm leading-7 text-stone">{item.company}</p>
+        </div>
+      );
+    }
+
+    function App() {
+      const [mobileOpen, setMobileOpen] = useState(false);
+      const [activeCase, setActiveCase] = useState('angelina');
+      const [scrolled, setScrolled] = useState(false);
+      const [modalCase, setModalCase] = useState(null);
+
+      useEffect(() => {
+        const handleScroll = () => setScrolled(window.scrollY > 40);
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+      }, []);
+
+      const handleNavLink = (id) => {
+        setMobileOpen(false);
+        const target = document.getElementById(id);
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      };
+
+      const selectProject = (id) => {
+        setActiveCase(id);
+        handleNavLink('case-studies');
+      };
+
+      return (
+        <main className="relative overflow-hidden">
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-[460px] bg-gradient-to-b from-white/10 to-transparent blur-3xl" />
+          <header className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${scrolled ? 'bg-ink/95 backdrop-blur-xl py-4 shadow-soft' : 'py-6'}`}>
+            <div className="mx-auto flex max-w-7xl items-center justify-between px-6 md:px-8">
+              <a href="#home" className="font-serif text-[1.1rem] uppercase tracking-[0.35em] text-cream">SAVISH</a>
+              <nav className="hidden items-center gap-10 md:flex">
+                {navLinks.map((item) => (
+                  <button key={item.id} type="button" onClick={() => handleNavLink(item.id)} className="text-[11px] uppercase tracking-[0.3em] text-cream/70 transition hover:text-cream">{item.label}</button>
+                ))}
+                <button type="button" onClick={() => handleNavLink('contact')} className="rounded-full border border-white/15 bg-white/5 px-5 py-3 text-[11px] uppercase tracking-[0.3em] text-cream transition hover:bg-cream hover:text-ink">Connect</button>
+              </nav>
+              <button type="button" onClick={() => setMobileOpen((value) => !value)} className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-cream md:hidden">
+                <span className="sr-only">Toggle menu</span>
+                <div className="space-y-1">
+                  <span className="block h-0.5 w-6 bg-cream" />
+                  <span className="block h-0.5 w-6 bg-cream" />
+                  <span className="block h-0.5 w-6 bg-cream" />
+                </div>
+              </button>
+            </div>
+          </header>
+
+          <AnimatePresence>
+            {mobileOpen ? (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-40 bg-ink/90 px-6 py-8 md:hidden">
+                <div className="flex items-center justify-between">
+                  <span className="font-serif text-[1rem] uppercase tracking-[0.35em] text-cream">SAVISH</span>
+                  <button type="button" onClick={() => setMobileOpen(false)} className="text-cream text-[1.25rem]">✕</button>
+                </div>
+                <div className="mt-12 space-y-8">
+                  {navLinks.map((item) => (
+                    <button key={item.id} type="button" onClick={() => handleNavLink(item.id)} className="block w-full text-left text-3xl font-serif leading-[1.1] text-cream">{item.label}</button>
+                  ))}
+                </div>
+              </motion.div>
+            ) : null}
+          </AnimatePresence>
+
+          <section id="home" className="relative min-h-screen pt-28 pb-24">
+            <div className="absolute inset-0 opacity-40">
+              <div className="absolute left-10 top-24 h-40 w-40 rounded-full bg-sand/10 blur-3xl" />
+              <div className="absolute right-10 top-32 h-72 w-72 rounded-full bg-white/5 blur-3xl" />
+              <div className="absolute left-1/2 top-1/4 h-56 w-56 -translate-x-1/2 rounded-full border border-white/10" />
+            </div>
+            <div className="relative mx-auto flex max-w-6xl flex-col gap-20 px-6 md:px-8">
+              <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr] hero-grid">
+                <motion.div initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, ease: 'easeOut' }} className="flex flex-col justify-center">
+                  <p className="text-[11px] uppercase tracking-[0.4em] text-sand mb-8">Marketing | Creative Direction | Brand Growth | Content Strategy | Account Management</p>
+                  <h1 className="font-serif text-[clamp(4rem,10vw,8rem)] leading-[0.92] tracking-[-0.03em] text-cream">Savannah Vargas</h1>
+                  <p className="mt-8 max-w-2xl text-[1.15rem] leading-[1.75] text-cream font-light tracking-[-0.01em]">Helping businesses turn marketing into a growth engine.</p>
+                  <p className="mt-4 max-w-2xl text-[0.95rem] leading-[1.95] text-stone">From executive strategy sessions and campaign development to content production and performance reporting, I partner directly with business owners to build brands that attract attention and drive results.</p>
+                  <div className="mt-10 flex flex-wrap gap-5">
+                    <button type="button" onClick={() => handleNavLink('work')} className="rounded-full bg-sand px-7 py-4 text-[11px] uppercase tracking-[0.32em] text-ink transition hover:bg-cream">View Work</button>
+                    <button type="button" onClick={() => handleNavLink('contact')} className="rounded-full border border-white/15 bg-white/5 px-7 py-4 text-[11px] uppercase tracking-[0.32em] text-cream transition hover:border-sand hover:text-sand">Connect</button>
+                  </div>
+                </motion.div>
+                <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.14, duration: 0.8, ease: 'easeOut' }} className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/5 p-8">
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.16),_transparent_30%)]" aria-hidden="true" />
+                  <div className="relative h-full min-h-[420px] overflow-hidden rounded-[24px] bg-[radial-gradient(circle_at_20%_20%,_rgba(196,173,150,0.16),_transparent_18%),radial-gradient(circle_at_80%_80%,_rgba(242,237,230,0.08),_transparent_20%)]">
+                    <img src="https://placehold.co/1200x900?text=Luxury+Creative" alt="Luxury creative hero" className="h-full w-full object-cover opacity-90" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/30 to-transparent" />
+                  </div>
+                </motion.div>
+              </div>
+              <div className="grid gap-6 rounded-[32px] border border-white/10 bg-ink/60 p-7 sm:grid-cols-2 lg:grid-cols-4">
+                {['Strategy', 'Creative', 'Growth', 'Results'].map((item) => (
+                  <div key={item} className="rounded-[24px] border border-white/10 bg-white/5 p-6 text-center">
+                    <p className="text-[11px] uppercase tracking-[0.32em] text-sand mb-3">{item}</p>
+                    <p className="text-2xl font-serif text-cream">Refined</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <section id="about" className="border-t border-white/10 py-24 px-6 md:px-8">
+            <div className="mx-auto grid max-w-7xl gap-16 items-start lg:grid-cols-[0.42fr_1.58fr]">
+              <motion.div initial={{ opacity: 0, x: -24 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.8, ease: 'easeOut' }} className="relative mx-auto lg:mx-0 w-full max-w-[320px] overflow-hidden rounded-[32px] bg-[radial-gradient(circle_at_top_left,_rgba(196,173,150,0.12),_transparent_20%)] lg:-mt-4">
+                <img src="https://placehold.co/900x1200?text=Savannah+Portrait" alt="Professional portrait" className="h-[380px] w-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink/60 via-ink/10 to-transparent" />
+              </motion.div>
+              <motion.div initial={{ opacity: 0, x: 24 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.8, ease: 'easeOut' }} className="flex flex-col justify-center">
+                <p className="text-[11px] uppercase tracking-[0.34em] text-sand mb-6">About</p>
+                <h2 className="font-serif text-[clamp(3rem,6vw,4.5rem)] leading-[0.95] text-cream">Hi, I'm Savannah</h2>
+                <p className="mt-8 max-w-2xl text-base leading-[1.95] text-stone">I’m a marketing professional and founder of Savish with experience managing 60+ client accounts across hospitality, lifestyle, luxury, events, and small businesses.</p>
+                <p className="mt-8 max-w-2xl text-base leading-[1.95] text-stone">My experience includes:</p>
+                <div className="mt-8 grid gap-4 sm:grid-cols-2">
+                  {[
+                    'Develop multi-channel marketing strategies',
+                    'Manage client relationships and campaigns',
+                    'Create high-performing social and video content',
+                    'Execute email and SMS marketing initiatives',
+                    'Analyze performance and optimize campaigns',
+                    'Coordinate creative teams and production shoots',
+                  ].map((item) => (
+                    <div key={item} className="rounded-[24px] border border-white/10 bg-white/5 p-6">
+                      <p className="text-sm text-cream">• {item}</p>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-12 grid gap-6 sm:grid-cols-2">
+                  {[
+                    { label: 'Accounts Managed', value: '60+' },
+                    { label: 'Clients Acquired', value: '10+' },
+                    { label: 'Content Productions', value: '100+' },
+                    { label: 'Industries Served', value: 'Multiple' },
+                  ].map((stat) => (
+                    <motion.div key={stat.label} whileInView={{ opacity: 1, y: 0 }} initial={{ opacity: 0, y: 20 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="glass-panel rounded-[28px] border border-white/10 p-7">
+                      <p className="text-[11px] uppercase tracking-[0.3em] text-sand">{stat.label}</p>
+                      <p className="mt-4 font-serif text-[2.5rem] leading-[0.95] text-cream">{stat.value}</p>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+            </div>
+          </section>
+
+          <section id="how-i-work" className="border-t border-white/10 py-24 px-6 md:px-8">
+            <div className="mx-auto max-w-7xl">
+              <div className="grid gap-16 lg:grid-cols-[1fr_1.4fr] items-start">
+                <motion.div initial={{ opacity: 0, x: -24 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.8, ease: 'easeOut' }}>
+                  <p className="text-[11px] uppercase tracking-[0.34em] text-sand mb-6">Process</p>
+                  <h2 className="font-serif text-[clamp(2.6rem,5vw,4rem)] leading-[0.95] text-cream">How I Work With Clients</h2>
+                  <div className="mt-8 h-px w-16 bg-sand/40" />
+                  <p className="mt-8 text-[1.1rem] leading-[1.75] text-cream font-light tracking-[-0.01em]">More Than Social Media Management</p>
+                  <p className="mt-5 text-sm leading-[1.95] text-stone">Many businesses need more than someone to post content — they need a strategic marketing partner.</p>
+                  <p className="mt-5 text-sm leading-[1.95] text-stone">I work directly with business owners and leadership teams to develop marketing initiatives aligned with company goals. Through monthly strategy meetings, performance reporting, campaign planning, and creative direction, I help businesses make informed marketing decisions that support long-term growth.</p>
+                </motion.div>
+                <motion.div initial={{ opacity: 0, x: 24 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.8, ease: 'easeOut' }}>
+                  <p className="text-[11px] uppercase tracking-[0.34em] text-sand mb-8">What That Includes</p>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {[
+                      { label: 'Monthly Strategy Sessions', icon: '◎' },
+                      { label: 'Performance Reporting & Analytics', icon: '◎' },
+                      { label: 'Campaign Planning', icon: '◎' },
+                      { label: 'Marketing Recommendations', icon: '◎' },
+                      { label: 'Content Direction', icon: '◎' },
+                      { label: 'Budget Discussions', icon: '◎' },
+                      { label: 'Growth Opportunities', icon: '◎' },
+                      { label: 'Creative Brainstorming', icon: '◎' },
+                      { label: 'Team Collaboration', icon: '◎' },
+                    ].map((item, i) => (
+                      <motion.div key={item.label} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.055, duration: 0.5, ease: 'easeOut' }} className="flex items-center gap-4 rounded-[20px] border border-white/10 bg-white/5 px-5 py-4 transition hover:border-sand/30 hover:bg-white/8">
+                        <span className="text-sand text-xs leading-none">{item.icon}</span>
+                        <p className="text-sm text-cream leading-snug">{item.label}</p>
+                      </motion.div>
+                    ))}
+                  </div>
+                </motion.div>
+              </div>
+            </div>
+          </section>
+
+          <section id="work" className="border-t border-white/10 py-24 px-6 md:px-8 bg-cream text-ink">
+            <div className="mx-auto max-w-7xl">
+              <div className="mb-16 max-w-3xl">
+                <p className="text-[10px] uppercase tracking-[0.34em] text-stone mb-5">Selected Work</p>
+                <h2 className="font-serif text-[clamp(3rem,6vw,4.5rem)] leading-[0.95] text-ink">A focused portfolio of standout projects.</h2>
+                <p className="mt-8 max-w-2xl text-sm leading-7 text-stone">Explore select projects that demonstrate strategic growth, creative leadership, and measurable impact.</p>
+              </div>
+              <div className="grid gap-5 lg:grid-cols-3">
+                {workProjects.map((project) => (
+                  <motion.button key={project.id} whileHover={{ y: -6 }} transition={{ duration: 0.35, ease: 'easeOut' }} className="group relative overflow-hidden rounded-[32px] border border-ink/10 bg-ink/10 text-left" onClick={() => selectProject(project.id)}>
+                    <div className="relative h-[280px] overflow-hidden rounded-t-[32px] bg-ink/20">
+                      <img src={project.image} alt={project.name} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+                    </div>
+                    <div className="relative p-8">
+                      <p className="text-[11px] uppercase tracking-[0.32em] text-stone mb-4">Selected work</p>
+                      <h3 className="font-serif text-[1.8rem] leading-[1.05] text-ink">{project.name}</h3>
+                    </div>
+                  </motion.button>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <section id="brands" className="border-t border-white/10 py-24 px-6 md:px-8">
+            <div className="mx-auto max-w-7xl">
+              <div className="mb-16 max-w-3xl">
+                <p className="text-[10px] uppercase tracking-[0.34em] text-sand mb-5">Trusted by</p>
+                <h2 className="font-serif text-[clamp(3rem,6vw,4.5rem)] leading-[0.95] text-cream">Brands I’ve Worked With</h2>
+                <p className="mt-8 max-w-2xl text-sm leading-7 text-stone">A selection of brands and partners that trust Savish for strategy, creative direction, and measurable growth.</p>
+              </div>
+              <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 items-center justify-items-center">
+                {[
+                  { src: 'logos/white-circle-bmw-logo-gray.png', alt: 'Circle BMW Gray' },
+                  { src: 'logos/white-copy-of-dual-logo-email-header-18-x-24-in-18-x-36-in-48-x-24-in-36-x-24-in-.png', alt: 'Dual Logo Email Header' },
+                  { src: 'logos/white-eo-wedding-logo-white-01.png', alt: 'EO Wedding' },
+                  { src: 'logos/white-flash-security.png', alt: 'Flash Security' },
+                  { src: 'logos/white-group-60.png', alt: 'Group 60' },
+                  { src: 'logos/white-guaranteed-service.png', alt: 'Guaranteed Service' },
+                  { src: 'logos/white-landmark-hospitality.png', alt: 'Landmark Hospitality' },
+                  { src: 'logos/white-laurita-logo-horizontal.png', alt: 'Laurita' },
+                  { src: 'logos/white-lombardi_aesthetic-2048x597.png', alt: 'Lombardi Aesthetic' },
+                  { src: 'logos/white-nicotras-ballroom.png', alt: 'Nicotras Ballroom' },
+                  { src: 'logos/molly-logo.svg', alt: 'Molly', whiteFilter: true },
+                  { src: 'logos/white-scenic-view.png', alt: 'Scenic View Landscaping' },
+                ].map((logo) => (
+                  <div key={logo.src} className="flex items-center justify-center p-6">
+                    <img
+                      src={logo.src}
+                      alt={logo.alt}
+                      style={logo.whiteFilter ? { filter: 'brightness(0) invert(1)' } : undefined}
+                      className="max-h-20 max-w-full object-contain"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <section id="case-studies" className="border-t border-white/10 py-24 px-6 md:px-8">
+            <div className="mx-auto max-w-7xl">
+              <div className="mb-16 flex flex-col gap-8 xl:flex-row xl:items-end xl:justify-between">
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.34em] text-sand mb-5">Case Studies</p>
+                  <h2 className="font-serif text-[clamp(3rem,6vw,4.5rem)] leading-[0.95] text-cream">Strategic storytelling that creates measurable growth.</h2>
+                </div>
+                <p className="max-w-xl text-sm leading-7 text-stone">Three detailed case studies that showcase premium creative direction, content strategy, and growth-focused execution.</p>
+              </div>
+              <div className="space-y-8">
+                {caseStudies.map((study) => (
+                  <CaseStudyCard key={study.id} study={study} isOpen={activeCase === study.id} onToggle={setActiveCase} onOpenModal={setModalCase} />
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <section id="results" className="border-t border-white/10 py-24 px-6 md:px-8 bg-ink">
+            <div className="mx-auto grid max-w-7xl gap-16 lg:grid-cols-[1fr_1.2fr]">
+              <div>
+                <SectionHeading label="Results" title="Results That Matter" />
+                <p className="mt-8 max-w-2xl text-sm leading-[1.9] text-stone">Dashboard-inspired reporting that keeps every campaign outcome clear, premium, and tied to business priorities.</p>
+              </div>
+              <div className="grid gap-6 sm:grid-cols-2">
+                {resultCards.map((card) => <CountCard key={card.label} label={card.label} value={card.value} />)}
+              </div>
+            </div>
+            <div className="mt-16 rounded-[32px] border border-white/10 bg-white/5 p-8">
+              <p className="text-[11px] uppercase tracking-[0.34em] text-sand mb-6">Quarterly trend</p>
+              <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-end">
+                <div className="space-y-4">
+                  <p className="text-sm text-stone">Subtle charts and premium reporting support every recommendation with evidence.</p>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div className="rounded-[24px] border border-white/10 bg-ink/70 p-5">
+                      <p className="text-[11px] uppercase tracking-[0.3em] text-sand">Reach</p>
+                      <p className="mt-4 text-3xl font-serif text-cream">+28%</p>
+                    </div>
+                    <div className="rounded-[24px] border border-white/10 bg-ink/70 p-5">
+                      <p className="text-[11px] uppercase tracking-[0.3em] text-sand">Engagement</p>
+                      <p className="mt-4 text-3xl font-serif text-cream">+18%</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="rounded-[24px] border border-white/10 bg-white/5 p-6">
+                  <LineChart />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section id="resume" className="border-t border-white/10 py-24 px-6 md:px-8 bg-cream text-ink">
+            <div className="mx-auto max-w-7xl">
+              <div className="grid gap-12 lg:grid-cols-[1fr_0.95fr]">
+                <div className="max-w-3xl">
+                  <p className="text-[10px] uppercase tracking-[0.34em] text-ink/60 mb-5">Resume</p>
+                  <h2 className="font-serif text-[clamp(3rem,6vw,4.5rem)] leading-[0.95] text-ink">A concise overview of leadership, strategy, and education.</h2>
+                  <p className="mt-8 text-sm leading-7 text-ink/80">Download a polished summary of experience and impact across hospitality, lifestyle, luxury, events, and small business brands.</p>
+                  <a href="#" download="Savannah-Vargas-Resume.pdf" className="mt-10 inline-flex rounded-full bg-ink px-8 py-4 text-[11px] uppercase tracking-[0.32em] text-cream transition hover:bg-ink/90">Download resume</a>
+                </div>
+                <div className="grid gap-6">
+                  {resumeTimeline.map((item) => (
+                    <div key={item.role} className="grid gap-3 rounded-[28px] border border-white/10 bg-white/5 p-6">
+                      <p className="text-[11px] uppercase tracking-[0.32em] text-sand">{item.date}</p>
+                      <p className="font-serif text-[1.5rem] text-cream">{item.role}</p>
+                      <p className="text-sm leading-7 text-stone">{item.company}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section id="contact" className="border-t border-white/10 py-24 px-6 md:px-8 bg-ink">
+            <div className="mx-auto grid max-w-7xl gap-16 lg:grid-cols-[0.95fr_1.05fr]">
+              <div className="rounded-[32px] border border-white/10 bg-white/5 p-10 backdrop-blur-xl">
+                <p className="text-[10px] uppercase tracking-[0.34em] text-sand mb-5">Contact</p>
+                <h2 className="font-serif text-[clamp(3rem,6vw,4.5rem)] leading-[0.95] text-cream">Let's Connect</h2>
+                <p className="mt-8 max-w-xl text-sm leading-[1.95] text-stone">Ready to move forward with a creative strategy that blends premium storytelling and measurable performance? Share the details and I’ll reach out promptly.</p>
+                <div className="mt-12 grid gap-6 text-sm text-stone">
+                  <div>
+                    <p className="uppercase tracking-[0.3em] text-sand mb-2">Email</p>
+                    <a href="mailto:hello@savish.com" className="link-underline text-cream">hello@savish.com</a>
+                  </div>
+                  <div>
+                    <p className="uppercase tracking-[0.3em] text-sand mb-2">LinkedIn</p>
+                    <a href="#" className="link-underline text-cream">linkedin.com/in/savish</a>
+                  </div>
+                  <div>
+                    <p className="uppercase tracking-[0.3em] text-sand mb-2">Instagram</p>
+                    <a href="#" className="link-underline text-cream">@savishagency</a>
+                  </div>
+                </div>
+              </div>
+              <form className="grid gap-6 rounded-[32px] border border-white/10 bg-white/5 p-10 backdrop-blur-xl">
+                <div className="grid gap-6 md:grid-cols-2">
+                  <label className="grid gap-2 text-sm text-stone">
+                    <span className="uppercase tracking-[0.25em] text-sand">Name</span>
+                    <input className="rounded-[16px] border border-white/10 bg-ink/80 px-4 py-4 text-sm text-cream outline-none transition focus:border-sand" placeholder="Your name" />
+                  </label>
+                  <label className="grid gap-2 text-sm text-stone">
+                    <span className="uppercase tracking-[0.25em] text-sand">Email</span>
+                    <input type="email" className="rounded-[16px] border border-white/10 bg-ink/80 px-4 py-4 text-sm text-cream outline-none transition focus:border-sand" placeholder="you@company.com" />
+                  </label>
+                </div>
+                <label className="grid gap-2 text-sm text-stone">
+                  <span className="uppercase tracking-[0.25em] text-sand">Message</span>
+                  <textarea className="min-h-[180px] rounded-[16px] border border-white/10 bg-ink/80 px-4 py-4 text-sm text-cream outline-none transition focus:border-sand" placeholder="Tell me about the opportunity" />
+                </label>
+                <button type="submit" className="self-start rounded-full bg-sand px-8 py-4 text-[11px] uppercase tracking-[0.32em] text-ink transition hover:bg-cream">Submit</button>
+              </form>
+            </div>
+          </section>
+
+          <footer className="border-t border-white/10 py-10 px-6 md:px-8">
+            <div className="mx-auto flex max-w-7xl flex-col gap-6 md:flex-row md:items-center md:justify-between">
+              <div>
+                <p className="font-serif text-[1.1rem] uppercase tracking-[0.35em] text-cream">SAVISH</p>
+                <p className="mt-4 text-sm tracking-[0.2em] uppercase text-sand">Marketing | Creative Direction | Strategy</p>
+              </div>
+              <div className="flex flex-wrap gap-6 text-[11px] uppercase tracking-[0.3em] text-stone">
+                <button type="button" onClick={() => handleNavLink('about')} className="transition hover:text-cream">About</button>
+                <button type="button" onClick={() => handleNavLink('case-studies')} className="transition hover:text-cream">Case Studies</button>
+                <button type="button" onClick={() => handleNavLink('contact')} className="transition hover:text-cream">Contact</button>
+              </div>
+            </div>
+          </footer>
+          {modalCase && <CaseStudyModal study={modalCase} onClose={() => setModalCase(null)} />}
+        </main>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(React.createElement(App));
+  </script>
+</body>
+</html>
