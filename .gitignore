@@ -1,14 +1,12 @@
-# Dev files
-node_modules/
 .DS_Store
-Thumbs.db
-*.log
+*.code-workspace
+node_modules/
+temporary screenshots/
+angelinas kitchen and ristorante/
+MOLLY P : OYSTER P/
 
-# Claude / IDE
-.claude/
-CLAUDE.md
-WEBSITE\ BUILDER.code-workspace
-Untitled-1
-
-# Temp screenshots
-temporary\ screenshots/
+# Large video files — host these on Vimeo/YouTube for deployment
+media/flash/reels/final-mike-flash.mp4
+media/flash/reels/reel-4.mp4
+media/flash/reels/reel-1.mp4
+media/angelinas/reels/reel-1.mov
