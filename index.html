@@ -345,7 +345,60 @@
 
     @media (max-width: 767px) {
       #nav { padding: 1.25rem 1.5rem; }
+
+      /* ── Section horizontal padding ── */
+      .sec-w  { padding-left: 1.25rem !important; padding-right: 1.25rem !important; }
+
+      /* ── Hero left content ── */
+      .hero-content { padding: 5.5rem 1.25rem 3rem !important; }
+
+      /* ── Case study card front face ── */
+      .cs-card-body { padding: 1.5rem !important; gap: 1.25rem !important; }
+
+      /* ── Case study expanded panel ── */
+      .cs-panel-body { padding: 1.5rem 1.25rem 1.25rem !important; }
+
+      /* ── 3-col reel grids → 2-col on mobile ── */
+      .reel-grid-3 { grid-template-columns: repeat(2, 1fr) !important; }
+
+      /* ── 3-col location photo grid → 2-col ── */
+      .loc-grid-3 { grid-template-columns: repeat(2, 1fr) !important; }
+
+      /* ── Section vertical padding ── */
+      .sec-pad { padding-top: 4rem !important; padding-bottom: 4rem !important; }
+
+      /* ── Experience heading row ── */
+      .exp-head { flex-direction: column !important; align-items: flex-start !important; }
+
+      /* ── Stat cells ── */
+      .stat-cell { padding: 1rem !important; }
+
+      /* ── Hero h1 font ── */
+      .hero-h1 { font-size: clamp(2.5rem, 11vw, 5.5rem) !important; }
     }
+
+  /* ── Hero typewriter ── */
+  @keyframes heroBlink {
+    0%,49%  { opacity:1; }
+    50%,100%{ opacity:0; }
+  }
+  .hero-cur {
+    display:inline-block;
+    width:2px;
+    height:0.78em;
+    background:#C4965A;
+    margin-left:3px;
+    vertical-align:-0.05em;
+    border-radius:1px;
+    animation:heroBlink 1s step-end infinite;
+  }
+  .hero-cur.typing  { animation:none; opacity:1; }
+  .hero-cur.done    { opacity:0; animation:none; transition:opacity 0.3s ease; }
+  .hl {
+    display:inline-block;
+    opacity:0;
+    transition:opacity 0.55s ease;
+  }
   </style>
 </head>
 <body>
@@ -402,14 +455,22 @@
     </div>
 
     <!-- Left content -->
-    <div style="position:relative;z-index:10;display:flex;flex-direction:column;justify-content:center;padding:8rem 4rem 4rem;width:100%;" class="md:w-[58%] lg:w-[54%] md:px-16 lg:px-24">
-      <h1 class="h-display" style="font-size:clamp(3rem,7vw,5.5rem);color:#F0EAE0;margin-bottom:1.25rem;">
-        Marketing<br>
-        <em style="color:#C4965A;font-style:italic;font-weight:300;">Strategist.</em><br>
-        Creative<br>
-        <em style="color:#C4965A;font-style:italic;font-weight:300;">Director.</em><br>
-        Growth<br>
-        <em style="color:#C4965A;font-style:italic;font-weight:300;">Partner.</em>
+    <div class="hero-content md:w-[58%] lg:w-[54%] md:px-16 lg:px-24" style="position:relative;z-index:10;display:flex;flex-direction:column;justify-content:center;padding:8rem 4rem 4rem;width:100%;">
+      <h1 class="h-display hero-h1" style="font-size:clamp(3rem,7vw,5.5rem);color:#F0EAE0;margin-bottom:1.25rem;position:relative;">
+        <!-- Final state: reserves full height, invisible during animation -->
+        <div id="hero-final" style="visibility:hidden;" aria-live="polite">
+          <span class="hl">Marketing</span><br>
+          <em class="hl" style="color:#C4965A;font-style:italic;font-weight:300;">Strategist.</em><br>
+          <span class="hl">Creative</span><br>
+          <em class="hl" style="color:#C4965A;font-style:italic;font-weight:300;">Director.</em><br>
+          <span class="hl">Growth</span><br>
+          <em class="hl" style="color:#C4965A;font-style:italic;font-weight:300;">Partner.</em>
+        </div>
+        <!-- Animation overlay -->
+        <div id="hero-anim" style="position:absolute;top:0;left:0;width:100%;">
+          <span>Marketing</span><br>
+          <em style="color:#C4965A;font-style:italic;font-weight:300;"><span id="hero-typed"></span><span class="hero-cur" id="hero-cur"></span></em>
+        </div>
       </h1>
 
       <p style="color:#C4965A;font-size:0.68rem;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:2rem;">Savannah Vargas</p>
@@ -427,31 +488,31 @@
   </section>
 
   <!-- ════════════════════ CREDIBILITY BAR ════════════════════ -->
-  <section style="padding:4.5rem 0;border-top:1px solid rgba(240,234,224,0.07);border-bottom:1px solid rgba(240,234,224,0.07);background:#181614;position:relative;overflow:hidden;">
+  <section class="sec-pad" style="padding:4.5rem 0;border-top:1px solid rgba(240,234,224,0.07);border-bottom:1px solid rgba(240,234,224,0.07);background:#181614;position:relative;overflow:hidden;">
     <div class="orb" style="width:30rem;height:30rem;background:rgba(196,150,90,0.04);top:-80%;left:50%;transform:translateX(-50%);"></div>
-    <div style="max-width:80rem;margin:0 auto;padding:0 3rem;position:relative;z-index:1;">
+    <div class="sec-w" style="max-width:80rem;margin:0 auto;padding:0 3rem;position:relative;z-index:1;">
       <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:2rem;" class="md:grid-cols-3">
-        <div style="text-align:center;padding:1.5rem 2rem;" class="reveal">
+        <div class="stat-cell reveal" style="text-align:center;padding:1.5rem 2rem;">
           <div class="stat-n" style="font-size:clamp(2rem,5vw,3.5rem);margin-bottom:0.5rem;">72M+</div>
           <div style="color:#9E9087;font-size:0.65rem;letter-spacing:0.16em;text-transform:uppercase;">Impressions</div>
         </div>
-        <div style="text-align:center;padding:1.5rem 2rem;" class="reveal" data-delay="0.1">
+        <div class="stat-cell reveal" data-delay="0.1" style="text-align:center;padding:1.5rem 2rem;">
           <div class="stat-n" style="font-size:clamp(2rem,5vw,3.5rem);margin-bottom:0.5rem;">958K+</div>
           <div style="color:#9E9087;font-size:0.65rem;letter-spacing:0.16em;text-transform:uppercase;">Engagements</div>
         </div>
-        <div style="text-align:center;padding:1.5rem 2rem;" class="reveal" data-delay="0.15">
+        <div class="stat-cell reveal" data-delay="0.15" style="text-align:center;padding:1.5rem 2rem;">
           <div class="stat-n" style="font-size:clamp(2rem,5vw,3.5rem);margin-bottom:0.5rem;">35K+</div>
           <div style="color:#9E9087;font-size:0.65rem;letter-spacing:0.16em;text-transform:uppercase;">Followers Added</div>
         </div>
-        <div style="text-align:center;padding:1.5rem 2rem;" class="reveal" data-delay="0.2">
+        <div class="stat-cell reveal" data-delay="0.2" style="text-align:center;padding:1.5rem 2rem;">
           <div class="stat-n" style="font-size:clamp(2rem,5vw,3.5rem);margin-bottom:0.5rem;">9.4M+</div>
           <div style="color:#9E9087;font-size:0.65rem;letter-spacing:0.16em;text-transform:uppercase;">Video Views</div>
         </div>
-        <div style="text-align:center;padding:1.5rem 2rem;" class="reveal" data-delay="0.25">
+        <div class="stat-cell reveal" data-delay="0.25" style="text-align:center;padding:1.5rem 2rem;">
           <div class="stat-n" style="font-size:clamp(2rem,5vw,3.5rem);margin-bottom:0.5rem;">18K+</div>
           <div style="color:#9E9087;font-size:0.65rem;letter-spacing:0.16em;text-transform:uppercase;">Website Clicks</div>
         </div>
-        <div style="text-align:center;padding:1.5rem 2rem;" class="reveal" data-delay="0.3">
+        <div class="stat-cell reveal" data-delay="0.3" style="text-align:center;padding:1.5rem 2rem;">
           <div class="stat-n" style="font-size:clamp(2rem,5vw,3.5rem);margin-bottom:0.5rem;">26,500+</div>
           <div style="color:#9E9087;font-size:0.65rem;letter-spacing:0.16em;text-transform:uppercase;">Posts Published</div>
         </div>
@@ -461,8 +522,8 @@
   </section>
 
   <!-- ════════════════════ BRANDS ════════════════════ -->
-  <section style="padding:5rem 0;background:#181614;border-top:1px solid rgba(240,234,224,0.07);border-bottom:1px solid rgba(240,234,224,0.07);position:relative;overflow:hidden;">
-    <div style="max-width:80rem;margin:0 auto;padding:0 3rem;" class="md:px-16">
+  <section class="sec-pad" style="padding:5rem 0;background:#181614;border-top:1px solid rgba(240,234,224,0.07);border-bottom:1px solid rgba(240,234,224,0.07);position:relative;overflow:hidden;">
+    <div class="sec-w md:px-16" style="max-width:80rem;margin:0 auto;padding:0 3rem;">
 
       <div style="text-align:center;margin-bottom:3.5rem;" class="reveal">
         <p class="label" style="margin-bottom:0.75rem;">Trusted By</p>
@@ -510,9 +571,9 @@
   </section>
 
   <!-- ════════════════════ ABOUT ════════════════════ -->
-  <section id="about" style="padding:8rem 0;position:relative;overflow:hidden;">
+  <section id="about" class="sec-pad" style="padding:8rem 0;position:relative;overflow:hidden;">
     <div class="orb" style="width:32rem;height:32rem;background:rgba(196,150,90,0.04);bottom:0;right:-8%;"></div>
-    <div style="max-width:80rem;margin:0 auto;padding:0 3rem;" class="md:px-16">
+    <div class="sec-w md:px-16" style="max-width:80rem;margin:0 auto;padding:0 3rem;">
       <div style="display:grid;gap:4rem;" class="md:grid-cols-2 md:gap-24">
 
         <div class="reveal">
@@ -551,9 +612,9 @@
   </section>
 
   <!-- ════════════════════ HOW I WORK ════════════════════ -->
-  <section style="padding:8rem 0;background:#181614;position:relative;overflow:hidden;">
+  <section class="sec-pad" style="padding:8rem 0;background:#181614;position:relative;overflow:hidden;">
     <div class="orb" style="width:36rem;height:36rem;background:rgba(196,150,90,0.04);top:10%;left:-10%;"></div>
-    <div style="max-width:80rem;margin:0 auto;padding:0 3rem;" class="md:px-16">
+    <div class="sec-w md:px-16" style="max-width:80rem;margin:0 auto;padding:0 3rem;">
 
       <div style="max-width:42rem;margin-bottom:4.5rem;" class="reveal">
         <p class="label" style="margin-bottom:1.5rem;">What I Provide</p>
@@ -607,9 +668,9 @@
   </section>
 
   <!-- ════════════════════ CASE STUDIES ════════════════════ -->
-  <section id="case-studies" style="padding:8rem 0;position:relative;overflow:hidden;">
+  <section id="case-studies" class="sec-pad" style="padding:8rem 0;position:relative;overflow:hidden;">
     <div class="orb" style="width:30rem;height:30rem;background:rgba(196,150,90,0.04);top:25%;right:-6%;"></div>
-    <div style="max-width:80rem;margin:0 auto;padding:0 3rem;" class="md:px-16">
+    <div class="sec-w md:px-16" style="max-width:80rem;margin:0 auto;padding:0 3rem;">
 
       <div style="margin-bottom:4.5rem;" class="reveal">
         <p class="label" style="margin-bottom:1.5rem;">Featured Work</p>
@@ -628,7 +689,7 @@
               <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.6),transparent);"></div>
               <div style="position:absolute;inset:0;background:#8B6E4A;mix-blend-mode:multiply;opacity:0.28;"></div>
             </div>
-            <div style="padding:3rem;display:flex;flex-direction:column;justify-content:space-between;gap:2rem;">
+            <div class="cs-card-body" style="padding:3rem;display:flex;flex-direction:column;justify-content:space-between;gap:2rem;">
               <div>
                 <p class="label" style="margin-bottom:1rem;">Restaurant Group</p>
                 <h3 class="h-display" style="font-size:clamp(1.75rem,3.5vw,2.5rem);color:#F0EAE0;margin-bottom:1rem;">Angelina's Kitchen &amp; Ristorante</h3>
@@ -651,7 +712,7 @@
 
           <!-- Expandable panel -->
           <div class="cs-panel" id="angelinas-panel" aria-hidden="true">
-            <div style="padding:3rem 3rem 2rem;" class="md:px-12">
+            <div class="cs-panel-body md:px-12" style="padding:3rem 3rem 2rem;">
 
               <!-- Challenge -->
               <div style="margin-bottom:2.5rem;">
@@ -705,7 +766,7 @@
                   <div class="gallery-item"><img src="media/angelinas/photos/225A5847.jpg" alt="Angelina's" class="gallery-img" style="aspect-ratio:auto;height:auto;"><div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.3),transparent);"></div></div>
                 </div>
                 <p style="color:#9E9087;font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:0.75rem;">Locations</p>
-                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.75rem;margin-bottom:1.25rem;">
+                <div class="loc-grid-3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.75rem;margin-bottom:1.25rem;">
                   <div class="gallery-item"><img src="media/angelinas/photos/R5_C0681.jpg" alt="Angelina's Location" class="gallery-img" style="aspect-ratio:auto;height:auto;"><div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.3),transparent);"></div></div>
                   <div class="gallery-item"><img src="media/angelinas/photos/R5_C1520.jpg" alt="Angelina's Location" class="gallery-img" style="aspect-ratio:auto;height:auto;"><div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.3),transparent);"></div></div>
                   <div class="gallery-item"><img src="media/angelinas/photos/location-3.png" alt="Angelina's Location" class="gallery-img" style="aspect-ratio:auto;height:auto;"><div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.3),transparent);"></div></div>
@@ -744,7 +805,7 @@
               <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.6),transparent);"></div>
               <div style="position:absolute;inset:0;background:#8B6E4A;mix-blend-mode:multiply;opacity:0.28;"></div>
             </div>
-            <div style="padding:3rem;display:flex;flex-direction:column;justify-content:space-between;gap:2rem;order:2;" class="md:order-1">
+            <div class="cs-card-body md:order-1" style="padding:3rem;display:flex;flex-direction:column;justify-content:space-between;gap:2rem;order:2;">
               <div>
                 <h3 class="h-display" style="font-size:clamp(1.75rem,3.5vw,2.5rem);color:#F0EAE0;margin-bottom:1rem;">Flash Security Integrators</h3>
                 <p style="color:#9E9087;font-size:0.875rem;line-height:1.8;margin-bottom:2rem;">
@@ -765,7 +826,7 @@
 
           <!-- Expandable panel -->
           <div class="cs-panel" id="flash-panel" aria-hidden="true">
-            <div style="padding:3rem 3rem 2rem;" class="md:px-12">
+            <div class="cs-panel-body md:px-12" style="padding:3rem 3rem 2rem;">
 
               <!-- Challenge -->
               <div style="margin-bottom:2.5rem;">
@@ -819,7 +880,7 @@
                   <div class="gallery-item"><img src="media/flash/photos/R5II6144.jpg" alt="Flash Security" class="gallery-img" style="aspect-ratio:auto;height:auto;"><div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.3),transparent);"></div></div>
                 </div>
                 <p style="color:#9E9087;font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:0.75rem;">Reels &amp; Video</p>
-                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.75rem;">
+                <div class="reel-grid-3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.75rem;">
                   <div class="reel-item" onclick="var v=this.querySelector('video');if(v.muted){v.play();v.muted=false}else{v.muted=true}">
                     <video src="media/flash/reels/core-values.mp4" autoplay muted loop playsinline preload="auto" style="width:100%;height:auto;display:block;"></video>
                     <div class="play-btn"><svg width="40" height="40" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="19" stroke="rgba(240,234,224,0.6)" stroke-width="1"/><path d="M13 17h3l5-4v14l-5-4h-3v-6z" fill="rgba(240,234,224,0.85)"/><path d="M25 16.5a5.5 5.5 0 0 1 0 7" stroke="rgba(240,234,224,0.85)" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M27.5 13.5a9.5 9.5 0 0 1 0 13" stroke="rgba(240,234,224,0.45)" stroke-width="1.3" fill="none" stroke-linecap="round"/></svg></div>
@@ -852,7 +913,7 @@
               <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.6),transparent);"></div>
               <div style="position:absolute;inset:0;background:#8B6E4A;mix-blend-mode:multiply;opacity:0.28;"></div>
             </div>
-            <div style="padding:3rem;display:flex;flex-direction:column;justify-content:space-between;gap:2rem;">
+            <div class="cs-card-body" style="padding:3rem;display:flex;flex-direction:column;justify-content:space-between;gap:2rem;">
               <div>
                 <p class="label" style="margin-bottom:1rem;">Luxury Hospitality</p>
                 <h3 class="h-display" style="font-size:clamp(1.75rem,3.5vw,2.5rem);color:#F0EAE0;margin-bottom:1rem;">Oyster Point &amp; Molly Pitcher Hotel</h3>
@@ -874,7 +935,7 @@
 
           <!-- Expandable panel -->
           <div class="cs-panel" id="oyster-panel" aria-hidden="true">
-            <div style="padding:3rem 3rem 2rem;" class="md:px-12">
+            <div class="cs-panel-body md:px-12" style="padding:3rem 3rem 2rem;">
 
               <!-- Challenge -->
               <div style="margin-bottom:2.5rem;">
@@ -934,7 +995,7 @@
                   <div class="gallery-item"><img src="media/oyster/photos/R6_C9154.jpg" alt="Oyster Point" class="gallery-img" style="aspect-ratio:auto;height:auto;"><div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.3),transparent);"></div></div>
                 </div>
                 <p style="color:#9E9087;font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:0.75rem;">Reels &amp; Video</p>
-                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.75rem;">
+                <div class="reel-grid-3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.75rem;">
                   <div class="reel-item" onclick="var v=this.querySelector('video');if(v.muted){v.play();v.muted=false}else{v.muted=true}">
                     <video src="media/oyster/reels/hotel-hype.mp4" class="reel-thumb" autoplay muted loop playsinline preload="auto" style="width:100%;aspect-ratio:9/16;object-fit:cover;display:block;"></video>
                     <div class="play-btn"><svg width="40" height="40" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="19" stroke="rgba(240,234,224,0.6)" stroke-width="1"/><path d="M13 17h3l5-4v14l-5-4h-3v-6z" fill="rgba(240,234,224,0.85)"/><path d="M25 16.5a5.5 5.5 0 0 1 0 7" stroke="rgba(240,234,224,0.85)" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M27.5 13.5a9.5 9.5 0 0 1 0 13" stroke="rgba(240,234,224,0.45)" stroke-width="1.3" fill="none" stroke-linecap="round"/></svg></div>
@@ -964,11 +1025,11 @@
   </section>
 
   <!-- ════════════════════ EXPERIENCE ════════════════════ -->
-  <section id="experience" style="padding:8rem 0;background:#181614;position:relative;overflow:hidden;">
+  <section id="experience" class="sec-pad" style="padding:8rem 0;background:#181614;position:relative;overflow:hidden;">
     <div class="orb" style="width:30rem;height:30rem;background:rgba(196,150,90,0.04);bottom:15%;right:-6%;"></div>
-    <div style="max-width:80rem;margin:0 auto;padding:0 3rem;" class="md:px-16">
+    <div class="sec-w md:px-16" style="max-width:80rem;margin:0 auto;padding:0 3rem;">
 
-      <div style="margin-bottom:5rem;display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:2rem;" class="reveal">
+      <div class="exp-head reveal" style="margin-bottom:5rem;display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:2rem;">
         <div>
           <p class="label" style="margin-bottom:1.5rem;">Background</p>
           <h2 class="h-display" style="font-size:clamp(2.25rem,5vw,3.75rem);color:#F0EAE0;line-height:1.1;">
@@ -1041,9 +1102,9 @@
   </section>
 
   <!-- ════════════════════ CONTACT ════════════════════ -->
-  <section id="contact" style="padding:8rem 0;position:relative;overflow:hidden;">
+  <section id="contact" class="sec-pad" style="padding:8rem 0;position:relative;overflow:hidden;">
     <div class="orb" style="width:36rem;height:36rem;background:rgba(196,150,90,0.045);top:20%;left:50%;transform:translateX(-50%);"></div>
-    <div style="max-width:80rem;margin:0 auto;padding:0 3rem;position:relative;z-index:1;text-align:center;" class="md:px-16">
+    <div class="sec-w md:px-16" style="max-width:80rem;margin:0 auto;padding:0 3rem;position:relative;z-index:1;text-align:center;">
       <div class="reveal">
         <p class="label" style="margin-bottom:1.5rem;">Get In Touch</p>
         <h2 class="h-display" style="font-size:clamp(3rem,8vw,6rem);color:#F0EAE0;line-height:1.05;">
@@ -1082,9 +1143,9 @@
   </section>
 
   <!-- ════════════════════ BEYOND THE PORTFOLIO ════════════════════ -->
-  <section style="padding:8rem 0;background:#181614;border-top:1px solid rgba(240,234,224,0.07);position:relative;overflow:hidden;">
+  <section class="sec-pad" style="padding:8rem 0;background:#181614;border-top:1px solid rgba(240,234,224,0.07);position:relative;overflow:hidden;">
     <div class="orb" style="width:28rem;height:28rem;background:rgba(196,150,90,0.04);bottom:0;left:-6%;"></div>
-    <div style="max-width:80rem;margin:0 auto;padding:0 3rem;" class="md:px-16">
+    <div class="sec-w md:px-16" style="max-width:80rem;margin:0 auto;padding:0 3rem;">
 
       <div style="display:grid;gap:5rem;align-items:center;" class="md:grid-cols-2">
 
@@ -1118,7 +1179,7 @@
 
   <!-- ════════════════════ FOOTER ════════════════════ -->
   <footer style="padding:3.5rem 0;border-top:1px solid rgba(240,234,224,0.07);background:#181614;">
-    <div style="max-width:80rem;margin:0 auto;padding:0 3rem;display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:1.5rem;" class="md:flex-row md:px-16">
+    <div class="sec-w md:flex-row md:px-16" style="max-width:80rem;margin:0 auto;padding:0 3rem;display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:1.5rem;">
       <div style="display:flex;flex-direction:column;align-items:center;gap:0.75rem;" class="md:items-start">
         <img src="BRAND%20KIT/LOGO.png" alt="Savish" style="height:1.75rem;filter:brightness(0) invert(1);opacity:0.65;">
         <p style="color:#9E9087;font-size:0.7rem;letter-spacing:0.1em;">Marketing Strategist &bull; Creative Director &bull; Growth Partner</p>
@@ -1264,6 +1325,90 @@
         document.getElementById('contact-btn-label').textContent = 'Send Message';
       }, 1200);
     }
+
+    // ── Hero typewriter ──
+    (function() {
+      const WORDS   = ['Strategist.', 'Director.', 'Partner.', 'Leader.'];
+      const typedEl = document.getElementById('hero-typed');
+      const curEl   = document.getElementById('hero-cur');
+      const animEl  = document.getElementById('hero-anim');
+      const finalEl = document.getElementById('hero-final');
+      if (!typedEl || !finalEl) return;
+
+      const lines = finalEl.querySelectorAll('.hl');
+      let wi = 0;
+
+      // Slightly varied human timing
+      function jitter(base, spread) {
+        return base + (Math.random() - 0.5) * spread;
+      }
+
+      function typeWord(word, done) {
+        curEl.classList.add('typing');
+        let i = 0;
+        (function next() {
+          if (i < word.length) {
+            typedEl.textContent += word[i++];
+            setTimeout(next, jitter(72, 38));
+          } else {
+            curEl.classList.remove('typing');
+            done();
+          }
+        })();
+      }
+
+      function deleteWord(done) {
+        curEl.classList.add('typing');
+        (function next() {
+          const t = typedEl.textContent;
+          if (t.length > 0) {
+            typedEl.textContent = t.slice(0, -1);
+            setTimeout(next, jitter(42, 18));
+          } else {
+            curEl.classList.remove('typing');
+            done();
+          }
+        })();
+      }
+
+      function step() {
+        typeWord(WORDS[wi], function() {
+          setTimeout(function() {
+            wi++;
+            if (wi < WORDS.length) {
+              deleteWord(function() {
+                setTimeout(step, 160);
+              });
+            } else {
+              // All words done — transition to final state
+              setTimeout(reveal, 800);
+            }
+          }, 800);
+        });
+      }
+
+      function reveal() {
+        // Fade out cursor
+        curEl.classList.add('done');
+
+        // Fade out animation overlay
+        animEl.style.transition = 'opacity 0.38s ease';
+        animEl.style.opacity = '0';
+
+        setTimeout(function() {
+          animEl.style.display = 'none';
+          finalEl.style.visibility = 'visible';
+
+          // Stagger each line in
+          lines.forEach(function(line, i) {
+            setTimeout(function() { line.style.opacity = '1'; }, i * 90);
+          });
+        }, 400);
+      }
+
+      // Small delay so the page paints first
+      setTimeout(step, 400);
+    })();
 
   </script>
 </body>
