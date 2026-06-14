@@ -375,6 +375,11 @@
 
       /* ── Hero h1 font ── */
       .hero-h1 { font-size: clamp(2.5rem, 11vw, 5.5rem) !important; }
+
+      /* ── Skip typewriter on mobile — show final headline immediately ── */
+      #hero-anim { display: none !important; }
+      #hero-final { visibility: visible !important; }
+      #hero-final .hl { opacity: 1 !important; transition: none !important; }
     }
 
   /* ── Hero typewriter ── */
