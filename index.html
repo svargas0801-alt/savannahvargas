@@ -176,10 +176,94 @@
     /* ── EXPERTISE TAGS ── */
     .etag {
       display: inline-flex;
-      border: 1px solid rgba(201,184,154,0.2);
+      border: 1px solid rgba(201,184,154,0.22);
       color: #C9B89A;
-      font-size: 0.78rem; letter-spacing: 0.04em;
-      padding: 0.5rem 0.9rem;
+      font-size: 0.875rem;
+      letter-spacing: 0.03em;
+      padding: 0.8rem 1.5rem;
+      cursor: pointer;
+      transition: border-color 0.22s ease, background 0.22s ease, color 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
+    }
+    .etag:hover {
+      border-color: rgba(196,150,90,0.6);
+      background: rgba(196,150,90,0.07);
+      color: #F0EAE0;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(196,150,90,0.12);
+    }
+    .etag.etag-active {
+      border-color: #C4965A;
+      background: rgba(196,150,90,0.14);
+      color: #C4965A;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(196,150,90,0.2);
+    }
+    .etag-hint {
+      font-size: 0.8rem;
+      color: #9E9087;
+      letter-spacing: 0.02em;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1.75rem;
+    }
+    @keyframes nudge {
+      0%, 100% { transform: translateX(0); }
+      60% { transform: translateX(5px); }
+    }
+    .hint-arrow {
+      display: inline-block;
+      color: #C4965A;
+      animation: nudge 2s ease-in-out infinite;
+      font-style: normal;
+    }
+    .etag-panel {
+      max-height: 0;
+      overflow: hidden;
+      padding: 0 2rem;
+      border-left: 2px solid transparent;
+      background: rgba(196,150,90,0.06);
+      opacity: 0;
+      margin-top: 0;
+      transition: max-height 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease, padding 0.4s ease, border-color 0.3s ease, margin-top 0.4s ease;
+    }
+    .etag-panel.etag-panel-visible {
+      max-height: 800px;
+      padding: 1.75rem 2rem;
+      border-left-color: #C4965A;
+      opacity: 1;
+      margin-top: 2rem;
+    }
+
+    /* ── H2 LINE CLIP REVEAL ── */
+    .h2-line-wrap {
+      overflow: hidden;
+      display: block;
+      padding-bottom: 0.06em;
+    }
+    .h2-line {
+      display: block;
+      transform: translateY(110%);
+      transition: transform 0.92s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform;
+    }
+    .h2-line.in { transform: translateY(0); }
+
+    /* Heading containers: don't translateY — lines do the motion */
+    .reveal.heading-block {
+      transform: none !important;
+      transition: opacity 0.01s ease !important;
+    }
+    /* Label fades up inside heading blocks */
+    .heading-block .label {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+      display: inline-block;
+    }
+    .heading-block.in .label {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     /* ── HOW I WORK ── */
@@ -374,35 +458,70 @@
       .stat-cell { padding: 1rem !important; }
 
       /* ── Hero h1 font ── */
-      .hero-h1 { font-size: clamp(2.5rem, 11vw, 5.5rem) !important; }
+      .hero-h1 { font-size: clamp(1.75rem, 8vw, 3.25rem) !important; }
 
-      /* ── Skip typewriter on mobile — show final headline immediately ── */
-      #hero-anim { display: none !important; }
-      #hero-final { visibility: visible !important; }
-      #hero-final .hl { opacity: 1 !important; transition: none !important; }
+      /* ── Mobile: disable hero ticker, show first phrase instantly ── */
+      .hero-tick-item { opacity:1!important;filter:none!important;transform:none!important;transition:none!important;display:none!important; }
+      .hero-tick-item:first-child { display:block!important;position:relative!important; }
+      #hero-progress-wrap, #hero-count { display:none!important; }
+      #hero-ticker { height:auto!important; }
+      .hero-entrance { opacity:1!important;transform:none!important;transition:none!important; }
     }
 
-  /* ── Hero typewriter ── */
-  @keyframes heroBlink {
-    0%,49%  { opacity:1; }
-    50%,100%{ opacity:0; }
+  /* ── Hero ticker ── */
+  #hero-ticker { position:relative; }
+  .hero-tick-item {
+    position:absolute; top:0; left:0; width:100%;
+    opacity:0; filter:blur(10px); transform:translateY(16px);
+    transition:opacity 0.72s ease, filter 0.72s ease, transform 0.72s cubic-bezier(0.4,0,0.2,1);
+    will-change:opacity,filter,transform;
+    pointer-events:none;
   }
-  .hero-cur {
-    display:inline-block;
-    width:2px;
-    height:0.78em;
-    background:#C4965A;
-    margin-left:3px;
-    vertical-align:-0.05em;
-    border-radius:1px;
-    animation:heroBlink 1s step-end infinite;
+  .hero-tick-item.tick-active {
+    opacity:1; filter:blur(0px); transform:translateY(0);
+    pointer-events:auto;
   }
-  .hero-cur.typing  { animation:none; opacity:1; }
-  .hero-cur.done    { opacity:0; animation:none; transition:opacity 0.3s ease; }
-  .hl {
-    display:inline-block;
-    opacity:0;
-    transition:opacity 0.55s ease;
+  .hero-tick-item.tick-exit {
+    opacity:0; filter:blur(8px); transform:translateY(-16px);
+    transition:opacity 0.55s ease, filter 0.55s ease, transform 0.55s cubic-bezier(0.4,0,0.2,1);
+  }
+  #hero-progress-wrap {
+    margin-top:1.75rem; height:1px;
+    background:rgba(196,150,90,0.1);
+    position:relative; overflow:hidden;
+  }
+  #hero-progress-fill {
+    position:absolute; left:0; top:0; height:100%;
+    background:linear-gradient(to right,rgba(196,150,90,0.35),#C4965A);
+    width:0%;
+  }
+  #hero-count {
+    display:inline-block; margin-top:0.8rem;
+    font-size:0.58rem; font-family:'DM Sans',sans-serif;
+    font-weight:500; letter-spacing:0.24em;
+    color:rgba(196,150,90,0.38); text-transform:uppercase;
+  }
+  @keyframes heroKenBurns {
+    from { transform:scale(1.0); }
+    to   { transform:scale(1.055) translateX(-1%); }
+  }
+  .hero-img-kenburns {
+    animation:heroKenBurns 24s ease-in-out infinite alternate;
+    will-change:transform;
+  }
+  .hero-entrance {
+    opacity:0; transform:translateY(14px);
+    transition:opacity 0.75s ease, transform 0.75s ease;
+  }
+  .hero-entrance.in { opacity:1; transform:translateY(0); }
+  /* ── Final "all phrases" state ── */
+  #hero-ticker.ticker-final {
+    height:auto !important;
+    display:flex; flex-direction:column; gap:0.85rem;
+  }
+  #hero-ticker.ticker-final .hero-tick-item {
+    position:relative !important;
+    top:auto !important; left:auto !important; width:100% !important;
   }
   </style>
 </head>
@@ -418,11 +537,12 @@
   <nav id="nav">
 
     <div style="display:flex; align-items:center; gap:2.5rem;" class="hidden md:flex">
-      <a href="#about"        class="nav-link">About</a>
-      <a href="#case-studies" class="nav-link">Case Studies</a>
-      <a href="#results"      class="nav-link">Results</a>
-      <a href="#experience"   class="nav-link">Experience</a>
-      <a href="#contact"      class="nav-link">Contact</a>
+      <a href="#about"              class="nav-link">About</a>
+      <a href="#case-studies"       class="nav-link">Case Studies</a>
+      <a href="#how-i-create-growth" class="nav-link">Results</a>
+      <a href="#experience"         class="nav-link">Resume</a>
+      <a href="#outside-work"       class="nav-link">Personal</a>
+      <a href="#contact"            class="nav-link">Contact</a>
     </div>
 
     <button id="ham" aria-label="Menu" class="md:hidden flex flex-col gap-1.5 p-2 focus-visible:outline focus-visible:outline-gold focus-visible:outline-1">
@@ -434,11 +554,12 @@
 
   <!-- Mobile nav -->
   <div id="mob-nav" role="dialog" aria-modal="true" aria-label="Navigation">
-    <a href="#about"        class="mob-link" onclick="closeMenu()">About</a>
-    <a href="#case-studies" class="mob-link" onclick="closeMenu()">Case Studies</a>
-    <a href="#results"      class="mob-link" onclick="closeMenu()">Results</a>
-    <a href="#experience"   class="mob-link" onclick="closeMenu()">Experience</a>
-    <a href="#contact"      class="mob-link" onclick="closeMenu()">Contact</a>
+    <a href="#about"               class="mob-link" onclick="closeMenu()">About</a>
+    <a href="#case-studies"        class="mob-link" onclick="closeMenu()">Case Studies</a>
+    <a href="#how-i-create-growth" class="mob-link" onclick="closeMenu()">Results</a>
+    <a href="#experience"          class="mob-link" onclick="closeMenu()">Resume</a>
+    <a href="#outside-work"        class="mob-link" onclick="closeMenu()">Personal</a>
+    <a href="#contact"             class="mob-link" onclick="closeMenu()">Contact</a>
   </div>
 
   <!-- ════════════════════ HERO ════════════════════ -->
@@ -447,8 +568,8 @@
     <div class="orb" style="width:28rem;height:28rem;background:rgba(196,150,90,0.03);bottom:15%;left:35%;"></div>
 
     <!-- Image: absolute, blends into left content via gradient. Inset 15vh top/bottom = ~30% smaller vertically -->
-    <div class="hidden md:block" style="position:absolute;right:0;top:3vh;bottom:10vh;width:54%;pointer-events:none;">
-      <img src="media/headshots/hero.jpeg" alt="Savannah Vargas" style="width:100%;height:100%;object-fit:cover;object-position:top center;border-radius:0.5rem 0 0 0.5rem;">
+    <div class="hidden md:block" style="position:absolute;right:0;top:3vh;bottom:10vh;width:54%;pointer-events:none;overflow:hidden;border-radius:0.5rem 0 0 0.5rem;">
+      <img src="media/headshots/hero.jpeg" alt="Savannah Vargas" class="hero-img-kenburns" style="width:100%;height:100%;object-fit:cover;object-position:top center;">
       <!-- left blend: image fades seamlessly into text area -->
       <div style="position:absolute;inset:0;background:linear-gradient(to right,#111110 0%,rgba(17,17,16,0.88) 12%,rgba(17,17,16,0.45) 38%,rgba(17,17,16,0.05) 68%,transparent 100%);border-radius:inherit;"></div>
       <!-- top blend -->
@@ -461,69 +582,39 @@
 
     <!-- Left content -->
     <div class="hero-content md:w-[58%] lg:w-[54%] md:px-16 lg:px-24" style="position:relative;z-index:10;display:flex;flex-direction:column;justify-content:center;padding:8rem 4rem 4rem;width:100%;">
-      <h1 class="h-display hero-h1" style="font-size:clamp(3rem,7vw,5.5rem);color:#F0EAE0;margin-bottom:1.25rem;position:relative;">
-        <!-- Final state: reserves full height, invisible during animation -->
-        <div id="hero-final" style="visibility:hidden;" aria-live="polite">
-          <span class="hl">Marketing</span><br>
-          <em class="hl" style="color:#C4965A;font-style:italic;font-weight:300;">Strategist.</em><br>
-          <span class="hl">Creative</span><br>
-          <em class="hl" style="color:#C4965A;font-style:italic;font-weight:300;">Director.</em><br>
-          <span class="hl">Growth</span><br>
-          <em class="hl" style="color:#C4965A;font-style:italic;font-weight:300;">Partner.</em>
-        </div>
-        <!-- Animation overlay -->
-        <div id="hero-anim" style="position:absolute;top:0;left:0;width:100%;">
-          <span>Marketing</span><br>
-          <em style="color:#C4965A;font-style:italic;font-weight:300;"><span id="hero-typed"></span><span class="hero-cur" id="hero-cur"></span></em>
+
+      <p style="color:#C4965A;font-size:0.68rem;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:1.75rem;" class="hero-entrance" id="hero-label">Savannah Vargas</p>
+
+      <h1 class="h-display hero-h1" style="font-size:clamp(2rem,4.5vw,3.75rem);color:#F0EAE0;margin-bottom:0;position:relative;">
+        <div id="hero-ticker">
+          <div class="hero-tick-item" data-idx="0">
+            <span style="display:block;">Marketing</span>
+            <em style="display:block;color:#C4965A;font-style:italic;font-weight:300;">Strategist.</em>
+          </div>
+          <div class="hero-tick-item" data-idx="1">
+            <span style="display:block;">Media Marketing</span>
+            <em style="display:block;color:#C4965A;font-style:italic;font-weight:300;">Manager.</em>
+          </div>
+          <div class="hero-tick-item" data-idx="2">
+            <span style="display:block;">Growth</span>
+            <em style="display:block;color:#C4965A;font-style:italic;font-weight:300;">Partner.</em>
+          </div>
         </div>
       </h1>
 
-      <p style="color:#C4965A;font-size:0.68rem;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:2rem;">Savannah Vargas</p>
+      <div id="hero-progress-wrap" class="hero-entrance"><div id="hero-progress-fill"></div></div>
+      <span id="hero-count" class="hero-entrance">01 / 03</span>
 
-      <p style="color:#9E9087;font-size:1.0625rem;line-height:1.75;margin-bottom:3rem;max-width:34rem;">
+      <p style="color:#9E9087;font-size:1.0625rem;line-height:1.75;margin-bottom:3rem;max-width:34rem;margin-top:2.5rem;" class="hero-entrance" id="hero-tagline">
         Helping brands turn attention into measurable business growth.
       </p>
 
-      <div style="display:flex;flex-wrap:wrap;gap:1rem;">
+      <div style="display:flex;flex-wrap:wrap;gap:1rem;" class="hero-entrance" id="hero-ctas">
         <a href="#case-studies" class="btn-primary"><span>View Case Studies</span></a>
         <a href="#contact"      class="btn-ghost">Let's Connect</a>
       </div>
     </div>
 
-  </section>
-
-  <!-- ════════════════════ CREDIBILITY BAR ════════════════════ -->
-  <section class="sec-pad" style="padding:4.5rem 0;border-top:1px solid rgba(240,234,224,0.07);border-bottom:1px solid rgba(240,234,224,0.07);background:#181614;position:relative;overflow:hidden;">
-    <div class="orb" style="width:30rem;height:30rem;background:rgba(196,150,90,0.04);top:-80%;left:50%;transform:translateX(-50%);"></div>
-    <div class="sec-w" style="max-width:80rem;margin:0 auto;padding:0 3rem;position:relative;z-index:1;">
-      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:2rem;" class="md:grid-cols-3">
-        <div class="stat-cell reveal" style="text-align:center;padding:1.5rem 2rem;">
-          <div class="stat-n" style="font-size:clamp(2rem,5vw,3.5rem);margin-bottom:0.5rem;">72M+</div>
-          <div style="color:#9E9087;font-size:0.65rem;letter-spacing:0.16em;text-transform:uppercase;">Impressions</div>
-        </div>
-        <div class="stat-cell reveal" data-delay="0.1" style="text-align:center;padding:1.5rem 2rem;">
-          <div class="stat-n" style="font-size:clamp(2rem,5vw,3.5rem);margin-bottom:0.5rem;">958K+</div>
-          <div style="color:#9E9087;font-size:0.65rem;letter-spacing:0.16em;text-transform:uppercase;">Engagements</div>
-        </div>
-        <div class="stat-cell reveal" data-delay="0.15" style="text-align:center;padding:1.5rem 2rem;">
-          <div class="stat-n" style="font-size:clamp(2rem,5vw,3.5rem);margin-bottom:0.5rem;">35K+</div>
-          <div style="color:#9E9087;font-size:0.65rem;letter-spacing:0.16em;text-transform:uppercase;">Followers Added</div>
-        </div>
-        <div class="stat-cell reveal" data-delay="0.2" style="text-align:center;padding:1.5rem 2rem;">
-          <div class="stat-n" style="font-size:clamp(2rem,5vw,3.5rem);margin-bottom:0.5rem;">9.4M+</div>
-          <div style="color:#9E9087;font-size:0.65rem;letter-spacing:0.16em;text-transform:uppercase;">Video Views</div>
-        </div>
-        <div class="stat-cell reveal" data-delay="0.25" style="text-align:center;padding:1.5rem 2rem;">
-          <div class="stat-n" style="font-size:clamp(2rem,5vw,3.5rem);margin-bottom:0.5rem;">18K+</div>
-          <div style="color:#9E9087;font-size:0.65rem;letter-spacing:0.16em;text-transform:uppercase;">Website Clicks</div>
-        </div>
-        <div class="stat-cell reveal" data-delay="0.3" style="text-align:center;padding:1.5rem 2rem;">
-          <div class="stat-n" style="font-size:clamp(2rem,5vw,3.5rem);margin-bottom:0.5rem;">26,500+</div>
-          <div style="color:#9E9087;font-size:0.65rem;letter-spacing:0.16em;text-transform:uppercase;">Posts Published</div>
-        </div>
-      </div>
-      <p style="text-align:center;color:#9E9087;font-size:0.65rem;letter-spacing:0.1em;margin-top:2rem;opacity:0.6;">Source: 2025 portfolio-wide performance across 60+ brands.</p>
-    </div>
   </section>
 
   <!-- ════════════════════ BRANDS ════════════════════ -->
@@ -579,45 +670,145 @@
   <section id="about" class="sec-pad" style="padding:8rem 0;position:relative;overflow:hidden;">
     <div class="orb" style="width:32rem;height:32rem;background:rgba(196,150,90,0.04);bottom:0;right:-8%;"></div>
     <div class="sec-w md:px-16" style="max-width:80rem;margin:0 auto;padding:0 3rem;">
-      <div style="display:grid;gap:4rem;" class="md:grid-cols-2 md:gap-24">
+      <div style="display:grid;gap:5rem;align-items:center;" class="md:grid-cols-2">
 
         <div class="reveal">
           <p class="label" style="margin-bottom:1.5rem;">About</p>
           <h2 class="h-display" style="font-size:clamp(2.25rem,5vw,3.75rem);color:#F0EAE0;margin-bottom:2rem;line-height:1.1;">
-            A strategic<br>
-            <em style="color:#C4965A;font-style:italic;font-weight:300;">marketing partner</em><br>
-            for brands ready<br>to grow.
+            Marketing should create<br>
+            more than <em style="color:#C4965A;font-style:italic;font-weight:300;">engagement</em>—<br>
+            it should create business growth.
           </h2>
-          <p style="color:#9E9087;line-height:1.8;margin-bottom:1.5rem;font-size:0.9375rem;">
-            I've partnered with more than 60 brands across hospitality and restaurants, luxury hotels, automotive, healthcare and aesthetics, real estate, construction, events and weddings, and professional services. My work combines strategy, creative direction, content production, performance reporting, and client leadership to help businesses grow their audience, strengthen their brand, and achieve measurable business goals. Whether supporting a luxury waterfront resort, multi-location restaurant group, security company, medical practice, or growing local business, I focus on building marketing systems that drive long-term growth rather than short-term attention.
-          </p>
           <p style="color:#9E9087;line-height:1.8;font-size:0.9375rem;">
-            My role extends beyond content creation. I partner directly with ownership teams and executives to develop growth strategies, evaluate performance, identify opportunities, and execute marketing initiatives aligned with business objectives.
+            I've partnered with more than 60 brands across hospitality and restaurants, luxury hotels, automotive, healthcare and aesthetics, real estate, construction, events and weddings, and professional services. I partner directly with ownership teams and executives to develop growth strategies, evaluate performance, identify opportunities, and execute marketing initiatives aligned with business objectives. My work combines account management, strategy, creative direction, content production, performance reporting to help businesses grow their audience, strengthen their brand, and achieve measurable business goals. I focus on building marketing systems that drive long-term growth rather than short-term attention.
           </p>
         </div>
 
-        <div class="reveal" data-delay="0.15">
-          <p class="label" style="margin-bottom:2rem;">Core Expertise</p>
-          <div style="display:flex;flex-wrap:wrap;gap:0.6rem;">
-            <span class="etag">Marketing Strategy</span>
-            <span class="etag">Account Management</span>
-            <span class="etag">Creative Direction</span>
-            <span class="etag">Campaign Development</span>
-            <span class="etag">Social Media Marketing</span>
-            <span class="etag">Content Production</span>
-            <span class="etag">Email Marketing</span>
-            <span class="etag">SMS Marketing</span>
-            <span class="etag">Performance Reporting</span>
-            <span class="etag">Team Collaboration</span>
+        <div class="reveal" data-delay="0.1">
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:0;border:1px solid rgba(196,150,90,0.12);">
+            <div style="padding:2rem 1.5rem;border-right:1px solid rgba(196,150,90,0.12);border-bottom:1px solid rgba(196,150,90,0.12);text-align:center;">
+              <div class="stat-n" style="font-size:clamp(1.75rem,3.5vw,2.75rem);margin-bottom:0.4rem;">72M+</div>
+              <div style="color:#9E9087;font-size:0.6rem;letter-spacing:0.16em;text-transform:uppercase;">Impressions</div>
+            </div>
+            <div style="padding:2rem 1.5rem;border-bottom:1px solid rgba(196,150,90,0.12);text-align:center;">
+              <div class="stat-n" style="font-size:clamp(1.75rem,3.5vw,2.75rem);margin-bottom:0.4rem;">958K+</div>
+              <div style="color:#9E9087;font-size:0.6rem;letter-spacing:0.16em;text-transform:uppercase;">Engagements</div>
+            </div>
+            <div style="padding:2rem 1.5rem;border-right:1px solid rgba(196,150,90,0.12);border-bottom:1px solid rgba(196,150,90,0.12);text-align:center;">
+              <div class="stat-n" style="font-size:clamp(1.75rem,3.5vw,2.75rem);margin-bottom:0.4rem;">35K+</div>
+              <div style="color:#9E9087;font-size:0.6rem;letter-spacing:0.16em;text-transform:uppercase;">Followers Added</div>
+            </div>
+            <div style="padding:2rem 1.5rem;border-bottom:1px solid rgba(196,150,90,0.12);text-align:center;">
+              <div class="stat-n" style="font-size:clamp(1.75rem,3.5vw,2.75rem);margin-bottom:0.4rem;">9.4M+</div>
+              <div style="color:#9E9087;font-size:0.6rem;letter-spacing:0.16em;text-transform:uppercase;">Video Views</div>
+            </div>
+            <div style="padding:2rem 1.5rem;border-right:1px solid rgba(196,150,90,0.12);text-align:center;">
+              <div class="stat-n" style="font-size:clamp(1.75rem,3.5vw,2.75rem);margin-bottom:0.4rem;">18K+</div>
+              <div style="color:#9E9087;font-size:0.6rem;letter-spacing:0.16em;text-transform:uppercase;">Website Clicks</div>
+            </div>
+            <div style="padding:2rem 1.5rem;text-align:center;">
+              <div class="stat-n" style="font-size:clamp(1.75rem,3.5vw,2.75rem);margin-bottom:0.4rem;">26,500+</div>
+              <div style="color:#9E9087;font-size:0.6rem;letter-spacing:0.16em;text-transform:uppercase;">Posts Published</div>
+            </div>
           </div>
+          <p style="color:#9E9087;font-size:0.6rem;letter-spacing:0.1em;margin-top:1rem;opacity:0.55;">Source: 2025 portfolio-wide performance across 60+ brands.</p>
         </div>
 
       </div>
     </div>
   </section>
 
+  <!-- ════════════════════ HOW I CREATE GROWTH ════════════════════ -->
+  <section id="how-i-create-growth" class="sec-pad" style="padding:7rem 0 6rem;background:#181614;position:relative;overflow:hidden;">
+    <div class="orb" style="width:42rem;height:42rem;background:rgba(196,150,90,0.05);top:-5%;right:-10%;"></div>
+    <div class="orb" style="width:26rem;height:26rem;background:rgba(196,150,90,0.03);bottom:10%;left:-6%;"></div>
+    <div class="sec-w md:px-16" style="max-width:80rem;margin:0 auto;padding:0 3rem;">
+
+      <div style="display:grid;gap:3rem;align-items:end;margin-bottom:5rem;" class="md:grid-cols-2 md:gap-20">
+        <div class="reveal">
+          <p class="label" style="margin-bottom:1.5rem;">How I Create Growth</p>
+          <h2 class="h-display" style="font-size:clamp(2.25rem,5vw,3.75rem);color:#F0EAE0;line-height:1.1;">
+            Every area of work maps<br>to a <em style="color:#C4965A;font-style:italic;font-weight:300;">business outcome.</em>
+          </h2>
+        </div>
+        <div class="reveal" data-delay="0.1">
+          <p style="color:#9E9087;line-height:1.8;font-size:0.9375rem;">
+            Anyone can list skills. Here's how I actually use them to help businesses grow. Click any card to see real examples of how I approach each one.
+          </p>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-wrap:wrap;gap:0.85rem;" class="reveal" data-delay="0.2">
+        <span class="etag">Client Relationship Management</span>
+        <span class="etag">Strategic Account Management</span>
+        <span class="etag">Cross-Functional Team Leadership</span>
+        <span class="etag">Marketing Campaign Strategy</span>
+        <span class="etag">Creative Project Management</span>
+        <span class="etag">Brand &amp; Content Strategy</span>
+        <span class="etag">Performance Analytics &amp; Reporting</span>
+        <span class="etag">Business Development</span>
+        <span class="etag">Process Optimization</span>
+      </div>
+
+      <div id="etag-panel" class="etag-panel">
+        <div id="etag-panel-text"></div>
+      </div>
+
+      <div class="reveal" style="margin-top:3rem;padding-top:3rem;border-top:1px solid rgba(196,150,90,0.12);">
+        <p style="color:#C4965A;font-size:0.7rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0;">I Help Businesses...</p>
+        <div style="margin-top:2rem;border-top:1px solid rgba(196,150,90,0.2);display:grid;" class="sm:grid-cols-2">
+          <div>
+            <div style="display:flex;align-items:center;gap:1.25rem;padding:1.3rem 0;border-bottom:1px solid rgba(255,255,255,0.05);">
+              <span style="width:0.3rem;height:0.3rem;border-radius:50%;background:#C4965A;flex-shrink:0;opacity:0.7;"></span>
+              <p style="color:#F0EAE0;font-size:0.9375rem;font-weight:400;">Increase brand awareness</p>
+            </div>
+            <div style="display:flex;align-items:center;gap:1.25rem;padding:1.3rem 0;border-bottom:1px solid rgba(255,255,255,0.05);">
+              <span style="width:0.3rem;height:0.3rem;border-radius:50%;background:#C4965A;flex-shrink:0;opacity:0.7;"></span>
+              <p style="color:#F0EAE0;font-size:0.9375rem;font-weight:400;">Drive bookings &amp; inquiries</p>
+            </div>
+            <div style="display:flex;align-items:center;gap:1.25rem;padding:1.3rem 0;border-bottom:1px solid rgba(255,255,255,0.05);">
+              <span style="width:0.3rem;height:0.3rem;border-radius:50%;background:#C4965A;flex-shrink:0;opacity:0.7;"></span>
+              <p style="color:#F0EAE0;font-size:0.9375rem;font-weight:400;">Build customer loyalty</p>
+            </div>
+            <div style="display:flex;align-items:center;gap:1.25rem;padding:1.3rem 0;border-bottom:1px solid rgba(255,255,255,0.05);">
+              <span style="width:0.3rem;height:0.3rem;border-radius:50%;background:#C4965A;flex-shrink:0;opacity:0.7;"></span>
+              <p style="color:#F0EAE0;font-size:0.9375rem;font-weight:400;">Fill events &amp; promotions</p>
+            </div>
+            <div style="display:flex;align-items:center;gap:1.25rem;padding:1.3rem 0;border-bottom:1px solid rgba(255,255,255,0.05);" class="sm:border-b-0">
+              <span style="width:0.3rem;height:0.3rem;border-radius:50%;background:#C4965A;flex-shrink:0;opacity:0.7;"></span>
+              <p style="color:#F0EAE0;font-size:0.9375rem;font-weight:400;">Turn content into conversions</p>
+            </div>
+          </div>
+          <div style="border-left:1px solid rgba(255,255,255,0.05);">
+            <div style="display:flex;align-items:center;gap:1.25rem;padding:1.3rem 0 1.3rem 2.5rem;border-bottom:1px solid rgba(255,255,255,0.05);">
+              <span style="width:0.3rem;height:0.3rem;border-radius:50%;background:#C4965A;flex-shrink:0;opacity:0.7;"></span>
+              <p style="color:#F0EAE0;font-size:0.9375rem;font-weight:400;">Generate qualified leads</p>
+            </div>
+            <div style="display:flex;align-items:center;gap:1.25rem;padding:1.3rem 0 1.3rem 2.5rem;border-bottom:1px solid rgba(255,255,255,0.05);">
+              <span style="width:0.3rem;height:0.3rem;border-radius:50%;background:#C4965A;flex-shrink:0;opacity:0.7;"></span>
+              <p style="color:#F0EAE0;font-size:0.9375rem;font-weight:400;">Launch successful campaigns</p>
+            </div>
+            <div style="display:flex;align-items:center;gap:1.25rem;padding:1.3rem 0 1.3rem 2.5rem;border-bottom:1px solid rgba(255,255,255,0.05);">
+              <span style="width:0.3rem;height:0.3rem;border-radius:50%;background:#C4965A;flex-shrink:0;opacity:0.7;"></span>
+              <p style="color:#F0EAE0;font-size:0.9375rem;font-weight:400;">Improve customer experience</p>
+            </div>
+            <div style="display:flex;align-items:center;gap:1.25rem;padding:1.3rem 0 1.3rem 2.5rem;border-bottom:1px solid rgba(255,255,255,0.05);">
+              <span style="width:0.3rem;height:0.3rem;border-radius:50%;background:#C4965A;flex-shrink:0;opacity:0.7;"></span>
+              <p style="color:#F0EAE0;font-size:0.9375rem;font-weight:400;">Strengthen brand positioning</p>
+            </div>
+            <div style="display:flex;align-items:center;gap:1.25rem;padding:1.3rem 0 1.3rem 2.5rem;">
+              <span style="width:0.3rem;height:0.3rem;border-radius:50%;background:#C4965A;flex-shrink:0;opacity:0.7;"></span>
+              <p style="color:#F0EAE0;font-size:0.9375rem;font-weight:400;">Support long-term business growth</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
   <!-- ════════════════════ HOW I WORK ════════════════════ -->
-  <section class="sec-pad" style="padding:8rem 0;background:#181614;position:relative;overflow:hidden;">
+  <section class="sec-pad" style="padding:6rem 0;background:#181614;border-top:1px solid rgba(240,234,224,0.07);position:relative;overflow:hidden;">
     <div class="orb" style="width:36rem;height:36rem;background:rgba(196,150,90,0.04);top:10%;left:-10%;"></div>
     <div class="sec-w md:px-16" style="max-width:80rem;margin:0 auto;padding:0 3rem;">
 
@@ -1029,77 +1220,52 @@
     </div>
   </section>
 
-  <!-- ════════════════════ EXPERIENCE ════════════════════ -->
-  <section id="experience" class="sec-pad" style="padding:8rem 0;background:#181614;position:relative;overflow:hidden;">
+  <!-- ════════════════════ RESUME ════════════════════ -->
+  <section id="experience" class="sec-pad" style="padding:6rem 0;background:#181614;position:relative;overflow:hidden;">
     <div class="orb" style="width:30rem;height:30rem;background:rgba(196,150,90,0.04);bottom:15%;right:-6%;"></div>
     <div class="sec-w md:px-16" style="max-width:80rem;margin:0 auto;padding:0 3rem;">
-
-      <div class="exp-head reveal" style="margin-bottom:5rem;display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:2rem;">
-        <div>
-          <p class="label" style="margin-bottom:1.5rem;">Background</p>
-          <h2 class="h-display" style="font-size:clamp(2.25rem,5vw,3.75rem);color:#F0EAE0;line-height:1.1;">
-            Experience &amp; <em style="color:#C4965A;font-style:italic;font-weight:300;">Leadership</em>
-          </h2>
-        </div>
-        <a href="SAVANNAH-VARGAS-RESUME-2026.pdf" download="Savannah-Vargas-Resume-2026.pdf"
-           style="display:inline-flex;align-items:center;gap:0.6rem;padding:0.75rem 1.5rem;border:1px solid rgba(196,150,90,0.35);color:#C4965A;font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;border-radius:0.25rem;transition:background 0.25s, border-color 0.25s, color 0.25s;flex-shrink:0;"
-           onmouseover="this.style.background='rgba(196,150,90,0.1)';this.style.borderColor='rgba(196,150,90,0.65)';"
-           onmouseout="this.style.background='transparent';this.style.borderColor='rgba(196,150,90,0.35)';">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="flex-shrink:0;"><path d="M7 1v8M7 9l-3-3M7 9l3-3M2 12h10" stroke="#C4965A" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Download Full Résumé
+      <div class="reveal" style="max-width:54rem;">
+        <p class="label" style="margin-bottom:1.5rem;">Resume</p>
+        <h2 class="h-display" style="font-size:clamp(2.25rem,5vw,3.75rem);color:#F0EAE0;line-height:1.1;margin-bottom:1.75rem;">
+          The website shows<br>what I <em style="color:#C4965A;font-style:italic;font-weight:300;">do.</em>
+        </h2>
+        <p style="color:#9E9087;font-size:1.0625rem;line-height:1.8;margin-bottom:2.75rem;">My résumé shows how I got here.</p>
+        <a href="SAVANNAH-VARGAS-RESUME-2026.pdf" download="Savannah-Vargas-Resume-2026.pdf" class="btn-primary">
+          <span>Download the full résumé ↓</span>
         </a>
       </div>
+    </div>
+  </section>
 
-      <div style="max-width:42rem;display:flex;flex-direction:column;gap:0;">
+  <!-- ════════════════════ OUTSIDE THE WORK ════════════════════ -->
+  <section id="outside-work" class="sec-pad" style="padding:8rem 0;background:#181614;border-top:1px solid rgba(240,234,224,0.07);position:relative;overflow:hidden;">
+    <div class="orb" style="width:28rem;height:28rem;background:rgba(196,150,90,0.04);bottom:0;left:-6%;"></div>
+    <div class="sec-w md:px-16" style="max-width:80rem;margin:0 auto;padding:0 3rem;">
 
-        <!-- Role 1 -->
-        <div style="border-bottom:1px solid rgba(240,234,224,0.07);padding-bottom:3rem;margin-bottom:3rem;" class="reveal">
-          <div style="display:flex;align-items:flex-start;gap:1.5rem;">
-            <div class="tdot"></div>
-            <div style="flex:1;">
-              <div style="display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:0.75rem;">
-                <div>
-                  <p class="label" style="margin-bottom:0.35rem;">Industry Media</p>
-                  <h3 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.5rem,3vw,2rem);font-weight:500;color:#F0EAE0;">Media Manager</h3>
-                </div>
-                <span style="color:#9E9087;font-size:0.7rem;letter-spacing:0.1em;white-space:nowrap;padding-top:0.25rem;">2022 – Present</span>
-              </div>
-              <p style="color:#9E9087;font-size:0.875rem;line-height:1.8;">
-                Manage marketing initiatives across hospitality, luxury, lifestyle, events, and professional service brands.
-              </p>
-            </div>
+      <div style="display:grid;gap:5rem;align-items:center;" class="md:grid-cols-2">
+
+        <!-- Text -->
+        <div class="reveal">
+          <p class="label" style="margin-bottom:1.5rem;">Outside the Work</p>
+          <h2 class="h-display" style="font-size:clamp(2.25rem,5vw,3.75rem);color:#F0EAE0;line-height:1.1;margin-bottom:2.5rem;">
+            A Life of <em style="color:#C4965A;font-style:italic;font-weight:300;">Curiosity</em>
+          </h2>
+          <div style="display:flex;flex-direction:column;gap:1.5rem;">
+            <p style="color:#9E9087;font-size:0.9375rem;line-height:1.85;">Five months studying abroad in Argentina changed the way I see the world.</p>
+            <p style="color:#9E9087;font-size:0.9375rem;line-height:1.85;">Since then, I've been drawn to new cultures, new experiences, and opportunities that challenge me to grow. In 2023, that curiosity led me to backpack across six European countries in two weeks, exploring everything from Berlin and Prague to Venice, Porto, London, and Barcelona.</p>
+            <p style="color:#9E9087;font-size:0.9375rem;line-height:1.85;">Whether I'm traveling, hiking, running, or experimenting with a new recipe in the kitchen, I'm always looking for ways to learn, explore, and stay curious.</p>
+          </div>
+          <div style="display:flex;gap:2.5rem;margin-top:2.5rem;flex-wrap:wrap;">
+            <div><div style="color:#C4965A;font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:400;line-height:1;">6</div><div style="color:#9E9087;font-size:0.6rem;letter-spacing:0.16em;text-transform:uppercase;margin-top:0.35rem;">Countries in 2 Weeks</div></div>
+            <div><div style="color:#C4965A;font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:400;line-height:1;">5</div><div style="color:#9E9087;font-size:0.6rem;letter-spacing:0.16em;text-transform:uppercase;margin-top:0.35rem;">Months in Argentina</div></div>
           </div>
         </div>
 
-        <!-- Role 2 -->
-        <div style="border-bottom:1px solid rgba(240,234,224,0.07);padding-bottom:3rem;margin-bottom:3rem;" class="reveal" data-delay="0.1">
-          <div style="display:flex;align-items:flex-start;gap:1.5rem;">
-            <div class="tdot"></div>
-            <div style="flex:1;">
-              <div style="display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:0.75rem;">
-                <div>
-                  <p class="label" style="margin-bottom:0.35rem;">Savish</p>
-                  <h3 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.5rem,3vw,2rem);font-weight:500;color:#F0EAE0;">Founder</h3>
-                </div>
-                <span style="color:#9E9087;font-size:0.7rem;letter-spacing:0.1em;white-space:nowrap;padding-top:0.25rem;">2023 – Present</span>
-              </div>
-              <p style="color:#9E9087;font-size:0.875rem;line-height:1.8;">
-                Developed and managed marketing strategies, campaigns, and creative execution for growing businesses.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Education -->
-        <div class="reveal" data-delay="0.2">
-          <div style="display:flex;align-items:flex-start;gap:1.5rem;">
-            <div class="tdot"></div>
-            <div style="flex:1;">
-              <p class="label" style="margin-bottom:0.35rem;">Monmouth University</p>
-              <h3 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.5rem,3vw,2rem);font-weight:500;color:#F0EAE0;">Bachelor of Science</h3>
-              <p style="color:#9E9087;font-size:0.875rem;margin-top:0.5rem;">Business Administration</p>
-            </div>
-          </div>
+        <!-- Image -->
+        <div class="reveal" data-delay="0.15" style="position:relative;border-radius:0.75rem;overflow:hidden;">
+          <img src="media/travel%20blog.png" alt="Travel" style="width:100%;height:auto;display:block;border-radius:0.75rem;">
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(17,17,16,0.5),transparent 60%);border-radius:0.75rem;pointer-events:none;"></div>
+          <div style="position:absolute;inset:0;background:#8B6E4A;mix-blend-mode:multiply;opacity:0.12;border-radius:0.75rem;pointer-events:none;"></div>
         </div>
 
       </div>
@@ -1147,47 +1313,11 @@
     </div>
   </section>
 
-  <!-- ════════════════════ BEYOND THE PORTFOLIO ════════════════════ -->
-  <section class="sec-pad" style="padding:8rem 0;background:#181614;border-top:1px solid rgba(240,234,224,0.07);position:relative;overflow:hidden;">
-    <div class="orb" style="width:28rem;height:28rem;background:rgba(196,150,90,0.04);bottom:0;left:-6%;"></div>
-    <div class="sec-w md:px-16" style="max-width:80rem;margin:0 auto;padding:0 3rem;">
-
-      <div style="display:grid;gap:5rem;align-items:center;" class="md:grid-cols-2">
-
-        <!-- Text -->
-        <div class="reveal">
-          <p class="label" style="margin-bottom:1.5rem;">Outside the Work</p>
-          <h2 class="h-display" style="font-size:clamp(2.25rem,5vw,3.75rem);color:#F0EAE0;line-height:1.1;margin-bottom:2.5rem;">
-            A Life of <em style="color:#C4965A;font-style:italic;font-weight:300;">Curiosity</em>
-          </h2>
-          <div style="display:flex;flex-direction:column;gap:1.5rem;">
-            <p style="color:#9E9087;font-size:0.9375rem;line-height:1.85;">Five months studying abroad in Argentina changed the way I see the world.</p>
-            <p style="color:#9E9087;font-size:0.9375rem;line-height:1.85;">Since then, I've been drawn to new cultures, new experiences, and opportunities that challenge me to grow. In 2023, that curiosity led me to backpack across six European countries in two weeks, exploring everything from Berlin and Prague to Venice, Porto, London, and Barcelona.</p>
-            <p style="color:#9E9087;font-size:0.9375rem;line-height:1.85;">Whether I'm traveling, hiking, running, or experimenting with a new recipe in the kitchen, I'm always looking for ways to learn, explore, and stay curious.</p>
-          </div>
-          <div style="display:flex;gap:2.5rem;margin-top:2.5rem;flex-wrap:wrap;">
-            <div><div style="color:#C4965A;font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:400;line-height:1;">6</div><div style="color:#9E9087;font-size:0.6rem;letter-spacing:0.16em;text-transform:uppercase;margin-top:0.35rem;">Countries in 2 Weeks</div></div>
-            <div><div style="color:#C4965A;font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:400;line-height:1;">5</div><div style="color:#9E9087;font-size:0.6rem;letter-spacing:0.16em;text-transform:uppercase;margin-top:0.35rem;">Months in Argentina</div></div>
-          </div>
-        </div>
-
-        <!-- Image -->
-        <div class="reveal" data-delay="0.15" style="position:relative;border-radius:0.75rem;overflow:hidden;">
-          <img src="media/travel%20blog.png" alt="Travel" style="width:100%;height:auto;display:block;border-radius:0.75rem;">
-          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(17,17,16,0.5),transparent 60%);border-radius:0.75rem;pointer-events:none;"></div>
-          <div style="position:absolute;inset:0;background:#8B6E4A;mix-blend-mode:multiply;opacity:0.12;border-radius:0.75rem;pointer-events:none;"></div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
   <!-- ════════════════════ FOOTER ════════════════════ -->
   <footer style="padding:3.5rem 0;border-top:1px solid rgba(240,234,224,0.07);background:#181614;">
     <div class="sec-w md:flex-row md:px-16" style="max-width:80rem;margin:0 auto;padding:0 3rem;display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:1.5rem;">
       <div style="display:flex;flex-direction:column;align-items:center;gap:0.75rem;" class="md:items-start">
         <img src="BRAND%20KIT/LOGO.png" alt="Savish" style="height:1.75rem;filter:brightness(0) invert(1);opacity:0.65;">
-        <p style="color:#9E9087;font-size:0.7rem;letter-spacing:0.1em;">Marketing Strategist &bull; Creative Director &bull; Growth Partner</p>
       </div>
       <p style="color:#9E9087;font-size:0.7rem;letter-spacing:0.06em;">&copy; Savannah Vargas</p>
     </div>
@@ -1252,13 +1382,29 @@
       }
     }
 
-    // Reveal on scroll
+    // Split h2 headings into per-line clip-reveal spans
+    document.querySelectorAll('h2').forEach(h2 => {
+      const parts = h2.innerHTML.split(/<br\s*\/?>/gi);
+      h2.innerHTML = parts.map((line, i) =>
+        `<span class="h2-line-wrap"><span class="h2-line" data-line="${i}">${line.trim()}</span></span>`
+      ).join('');
+      const container = h2.closest('.reveal');
+      if (container) container.classList.add('heading-block');
+    });
+
+    // Reveal on scroll — also triggers h2 line animations
     const reveals = document.querySelectorAll('.reveal');
     const io = new IntersectionObserver(entries => {
       entries.forEach(e => {
         if (e.isIntersecting) {
           const d = parseFloat(e.target.dataset.delay || 0);
-          setTimeout(() => e.target.classList.add('in'), d * 1000);
+          setTimeout(() => {
+            e.target.classList.add('in');
+            e.target.querySelectorAll('.h2-line').forEach(line => {
+              const idx = parseInt(line.dataset.line || 0);
+              setTimeout(() => line.classList.add('in'), 60 + idx * 115);
+            });
+          }, d * 1000);
           io.unobserve(e.target);
         }
       });
@@ -1331,90 +1477,158 @@
       }, 1200);
     }
 
-    // ── Hero typewriter ──
+    // ── Hero blur-fade ticker ──
     (function() {
-      const WORDS   = ['Strategist.', 'Director.', 'Partner.', 'Leader.'];
-      const typedEl = document.getElementById('hero-typed');
-      const curEl   = document.getElementById('hero-cur');
-      const animEl  = document.getElementById('hero-anim');
-      const finalEl = document.getElementById('hero-final');
-      if (!typedEl || !finalEl) return;
+      var items   = Array.from(document.querySelectorAll('.hero-tick-item'));
+      var fill    = document.getElementById('hero-progress-fill');
+      var countEl = document.getElementById('hero-count');
+      var ticker  = document.getElementById('hero-ticker');
+      if (!items.length || !ticker) return;
 
-      const lines = finalEl.querySelectorAll('.hl');
-      let wi = 0;
+      var DISPLAY  = 2700;
+      var EXIT_DUR = 550;
+      var COUNTS   = ['01 / 03', '02 / 03', '03 / 03'];
+      var current  = 0;
 
-      // Slightly varied human timing
-      function jitter(base, spread) {
-        return base + (Math.random() - 0.5) * spread;
+      // Lock ticker height to tallest item (prevents layout shift)
+      items.forEach(function(it) {
+        it.style.cssText += 'position:relative;opacity:1;filter:none;transform:none;';
+      });
+      var maxH = Math.max.apply(null, items.map(function(it) { return it.offsetHeight; }));
+      ticker.style.height = maxH + 'px';
+      items.forEach(function(it) {
+        it.style.position = ''; it.style.opacity = ''; it.style.filter = ''; it.style.transform = '';
+      });
+
+      function startProgress(dur) {
+        if (!fill) return;
+        fill.style.transition = 'none';
+        fill.style.width = '0%';
+        fill.offsetHeight;
+        fill.style.transition = 'width ' + dur + 'ms linear';
+        fill.style.width = '100%';
       }
 
-      function typeWord(word, done) {
-        curEl.classList.add('typing');
-        let i = 0;
-        (function next() {
-          if (i < word.length) {
-            typedEl.textContent += word[i++];
-            setTimeout(next, jitter(72, 38));
-          } else {
-            curEl.classList.remove('typing');
-            done();
-          }
-        })();
+      function revealAll() {
+        var progWrap = document.getElementById('hero-progress-wrap');
+        if (progWrap) { progWrap.style.transition = 'opacity 0.5s ease'; progWrap.style.opacity = '0'; }
+        if (countEl)  { countEl.style.transition  = 'opacity 0.5s ease'; countEl.style.opacity  = '0'; }
+
+        // items[2] stays visible (tick-active); reset 0 and 1 to hidden base state
+        items[0].classList.remove('tick-active', 'tick-exit');
+        items[1].classList.remove('tick-active', 'tick-exit');
+
+        // switch ticker to stacked layout — item[2] remains visible
+        ticker.classList.add('ticker-final');
+
+        // stagger items[0] and [1] in
+        setTimeout(function() { items[0].classList.add('tick-active'); }, 180);
+        setTimeout(function() { items[1].classList.add('tick-active'); }, 400);
       }
 
-      function deleteWord(done) {
-        curEl.classList.add('typing');
-        (function next() {
-          const t = typedEl.textContent;
-          if (t.length > 0) {
-            typedEl.textContent = t.slice(0, -1);
-            setTimeout(next, jitter(42, 18));
-          } else {
-            curEl.classList.remove('typing');
-            done();
-          }
-        })();
-      }
+      function advance() {
+        var prev = current;
+        current  = (current + 1) % items.length;
 
-      function step() {
-        typeWord(WORDS[wi], function() {
-          setTimeout(function() {
-            wi++;
-            if (wi < WORDS.length) {
-              deleteWord(function() {
-                setTimeout(step, 160);
-              });
-            } else {
-              // All words done — transition to final state
-              setTimeout(reveal, 800);
-            }
-          }, 800);
-        });
-      }
-
-      function reveal() {
-        // Fade out cursor
-        curEl.classList.add('done');
-
-        // Fade out animation overlay
-        animEl.style.transition = 'opacity 0.38s ease';
-        animEl.style.opacity = '0';
+        items[prev].classList.remove('tick-active');
+        items[prev].classList.add('tick-exit');
+        setTimeout(function() { items[prev].classList.remove('tick-exit'); }, EXIT_DUR + 80);
 
         setTimeout(function() {
-          animEl.style.display = 'none';
-          finalEl.style.visibility = 'visible';
-
-          // Stagger each line in
-          lines.forEach(function(line, i) {
-            setTimeout(function() { line.style.opacity = '1'; }, i * 90);
-          });
-        }, 400);
+          items[current].classList.add('tick-active');
+          if (countEl) countEl.textContent = COUNTS[current];
+          startProgress(DISPLAY);
+          if (current < items.length - 1) {
+            setTimeout(advance, DISPLAY);
+          } else {
+            setTimeout(revealAll, DISPLAY);
+          }
+        }, 140);
       }
 
-      // Small delay so the page paints first
-      setTimeout(step, 400);
+      function init() {
+        var label   = document.getElementById('hero-label');
+        var tagline = document.getElementById('hero-tagline');
+        var ctas    = document.getElementById('hero-ctas');
+        var progEl  = document.getElementById('hero-progress-wrap');
+
+        if (label)   setTimeout(function() { label.classList.add('in'); },   80);
+        setTimeout(function() {
+          items[0].classList.add('tick-active');
+          startProgress(DISPLAY);
+        }, 320);
+        if (progEl)  setTimeout(function() { progEl.classList.add('in'); },  580);
+        if (countEl) setTimeout(function() { countEl.classList.add('in'); }, 640);
+        if (tagline) setTimeout(function() { tagline.classList.add('in'); }, 780);
+        if (ctas)    setTimeout(function() { ctas.classList.add('in'); },    940);
+
+        setTimeout(advance, DISPLAY + 320);
+      }
+
+      setTimeout(init, 120);
     })();
 
+    // ── ETAG CLICK INTERACTION ──
+    const etagDescriptions = {
+      'Client Relationship Management': [
+        'Every client works differently, so I created an onboarding process that helps me understand their business, goals, and customers from day one. By the end of onboarding, I don\'t just understand their business—I understand them. I want to know how they started their business, how they operate, who their target market is, and what success looks like to them.',
+        'From there, the relationship continues through monthly check-ins, weekly strategy calls (depending on the client), and on-site visits to their business. I believe the best marketing comes from building lasting partnerships, not just managing accounts.'
+      ],
+      'Strategic Account Management': [
+        'I oversee projects from kickoff to completion, making sure timelines, deliverables, and communication stay on track. My goal is simple: help clients feel supported while keeping every project moving forward smoothly.',
+        'Whether I\'m coordinating a campaign, answering client questions, or adjusting timelines when priorities change, I make sure everyone stays informed and nothing falls through the cracks.'
+      ],
+      'Cross-Functional Team Leadership': [
+        'I\'m the bridge between clients and our creative team. I coordinate photographers, videographers, designers, developers, freelancers, interns, and account managers so everyone is working toward the same goal.',
+        'I also lead weekly meetings with the entire team to review goals, deadlines, and introduce new AI tools and features that seem to be rolling out every week. My job is making sure communication stays clear and everyone has what they need to do their best work.'
+      ],
+      'Marketing Campaign Strategy': [
+        'Every campaign starts with one question: What does success look like? I help clients define SMART goals, understand their target audience, select the right platforms, and build a strategy that can actually be measured.',
+        'The strategy changes throughout the year for many of our businesses as goals evolve and new opportunities come up. Sometimes clients don\'t even know what their goals should be—that\'s where I come in. I help define what success looks like and figure out how we can capitalize on it.'
+      ],
+      'Creative Project Management': [
+        'Creative work is fun—but it\'s also organized chaos. From pre-production and planning shoots to managing edits, graphics, copy, approvals, and publishing, there are so many moving parts behind every campaign. It\'s a lot...but honestly, that\'s what makes it so fun.'
+      ],
+      'Brand & Content Strategy': [
+        'No two brands are the same, and I don\'t think they should be treated that way. I develop content strategies and build out client overview sheets that reflect each client\'s unique voice, connect with their audience, and support long-term growth.',
+        'That way if we have a new team member come in there\'s no time being wasted. I spend time understanding each business before creating content because the best marketing doesn\'t feel forced.'
+      ],
+      'Performance Analytics & Reporting': [
+        'I believe marketing should be measurable. I track campaign performance, identify what\'s working (and what\'s not), and use those insights to improve future campaigns.',
+        'Data helps tell the story behind every campaign, and I enjoy using those insights to make smarter marketing decisions and explain them to clients who want to understand.'
+      ],
+      'Business Development': [
+        'One thing I hear all the time is, "You can\'t measure business from social media." I couldn\'t disagree more. I\'ve identified new opportunities by treating social media as part of a larger business ecosystem—from generating qualified leads and growing email lists to supporting sales pipelines and creating real business opportunities.',
+        'Unfortunately, not every client shares their revenue numbers with us, but the feedback we do receive consistently tells us business is growing and our marketing is making an impact.',
+        'Don\'t believe me? Feel free to ask for references. I\'d be happy to connect you with current clients who can speak to the results and the experience of working with me.'
+      ],
+      'Process Optimization': [
+        'I\'ve helped build production workflows and approval processes that keep projects moving and reduce bottlenecks. Asana is my lifesaver, and I\'m always looking for new technology, AI tools, and better ways to make our process as seamless as possible.',
+        'I\'d confidently say a lot of the organization our team relies on today is because of systems I\'ve helped build and continue to improve.'
+      ]
+    };
+
+    const etags = document.querySelectorAll('#how-i-create-growth .etag');
+    const panel = document.getElementById('etag-panel');
+    const panelText = document.getElementById('etag-panel-text');
+
+    etags.forEach(tag => {
+      tag.addEventListener('click', () => {
+        const label = tag.textContent.trim();
+        const alreadyActive = tag.classList.contains('etag-active');
+        etags.forEach(t => t.classList.remove('etag-active'));
+        if (alreadyActive) {
+          panel.classList.remove('etag-panel-visible');
+        } else {
+          tag.classList.add('etag-active');
+          const paragraphs = etagDescriptions[label] || [];
+          panelText.innerHTML = paragraphs.map(p =>
+            `<p style="color:#F0EAE0;font-size:0.9375rem;line-height:1.8;margin-bottom:0.9rem;">${p}</p>`
+          ).join('');
+          panel.classList.add('etag-panel-visible');
+        }
+      });
+    });
 
   </script>
 </body>
